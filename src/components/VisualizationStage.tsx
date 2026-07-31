@@ -10,6 +10,7 @@ import LinkedListRenderer from "./renderers/LinkedListRenderer";
 import TreeRenderer from "./renderers/TreeRenderer";
 import GridRenderer from "./renderers/GridRenderer";
 import GraphRenderer from "./renderers/GraphRenderer";
+import IntervalRenderer from "./renderers/IntervalRenderer";
 
 function renderSpec(spec: RendererSpec, key: string) {
   switch (spec.kind) {
@@ -47,6 +48,8 @@ function renderSpec(spec: RendererSpec, key: string) {
           distanceVar={spec.distanceVar}
         />
       );
+    case "interval":
+      return <IntervalRenderer key={key} varName={spec.varName} />;
     default:
       return null;
   }

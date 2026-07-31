@@ -21,6 +21,10 @@ import { bfsGraphExample } from "./bfsGraph";
 import { numberOfIslandsExample } from "./numberOfIslands";
 import { dijkstraExample } from "./dijkstra";
 import { topologicalSortExample } from "./topologicalSort";
+import { mergeIntervalsExample } from "./mergeIntervals";
+import { insertIntervalExample } from "./insertInterval";
+import { jumpGameExample } from "./jumpGame";
+import { maximumSubarrayExample } from "./maximumSubarray";
 
 // Grows toward all 36 (per master.md §13) as each renderer lands in Phase 3.
 export const EXAMPLES: Example[] = [
@@ -46,6 +50,10 @@ export const EXAMPLES: Example[] = [
   numberOfIslandsExample,
   dijkstraExample,
   topologicalSortExample,
+  mergeIntervalsExample,
+  insertIntervalExample,
+  jumpGameExample,
+  maximumSubarrayExample,
 ];
 
 export function groupExamplesByTopic(examples: Example[]): Map<string, Example[]> {

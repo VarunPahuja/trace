@@ -18,7 +18,8 @@ export type RendererSpec =
   | { kind: "linkedlist"; headVars: string[]; pointerVars: string[] }
   | { kind: "tree"; rootVars: string[]; pointerVars: string[] }
   | { kind: "grid"; varName: string; rowVar?: string; colVar?: string }
-  | { kind: "graph"; graphVar: string; visitedVar?: string; pointerVars: string[]; distanceVar?: string };
+  | { kind: "graph"; graphVar: string; visitedVar?: string; pointerVars: string[]; distanceVar?: string }
+  | { kind: "interval"; varName: string };
 
 export interface Scene {
   primary: RendererSpec[];
@@ -53,6 +54,7 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
   const graphs = varsByRole(meta, "graph");
   const visitedSets = varsByRole(meta, "visitedSet");
   const queues = varsByRole(meta, "queue");
+  const intervalLists = varsByRole(meta, "intervalList");
   const [windowStart] = varsByRole(meta, "windowStart");
   const [windowEnd] = varsByRole(meta, "windowEnd");
 
@@ -101,6 +103,10 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
       queues.forEach((v) => secondary.push({ kind: "array", varName: v }));
       break;
     }
+
+    case "Intervals":
+      intervalLists.forEach((v) => primary.push({ kind: "interval", varName: v }));
+      break;
 
     case "Stack":
       stacks.forEach((v) => primary.push({ kind: "stack", varName: v }));
