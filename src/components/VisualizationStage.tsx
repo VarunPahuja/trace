@@ -6,6 +6,7 @@ import ArrayRenderer from "./renderers/ArrayRenderer";
 import HashMapRenderer from "./renderers/HashMapRenderer";
 import StackRenderer from "./renderers/StackRenderer";
 import WindowOverlay from "./renderers/WindowOverlay";
+import LinkedListRenderer from "./renderers/LinkedListRenderer";
 
 function renderSpec(spec: RendererSpec, key: string) {
   switch (spec.kind) {
@@ -27,6 +28,8 @@ function renderSpec(spec: RendererSpec, key: string) {
       return <HashMapRenderer key={key} varName={spec.varName} />;
     case "stack":
       return <StackRenderer key={key} varName={spec.varName} />;
+    case "linkedlist":
+      return <LinkedListRenderer key={key} headVars={spec.headVars} pointerVars={spec.pointerVars} />;
     default:
       return null;
   }

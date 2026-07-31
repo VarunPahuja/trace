@@ -14,7 +14,8 @@ export type RendererSpec =
       dimRangeEndVar?: string;
     }
   | { kind: "hashmap"; varName: string }
-  | { kind: "stack"; varName: string };
+  | { kind: "stack"; varName: string }
+  | { kind: "linkedlist"; headVars: string[]; pointerVars: string[] };
 
 export interface Scene {
   primary: RendererSpec[];
@@ -40,10 +41,17 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
   const hashMaps = varsByRole(meta, "hashMap");
   const stacks = varsByRole(meta, "stack");
   const pointers = varsByRole(meta, "pointer");
+  const linkedListHeads = varsByRole(meta, "linkedListHead");
   const [windowStart] = varsByRole(meta, "windowStart");
   const [windowEnd] = varsByRole(meta, "windowEnd");
 
   switch (meta.topic) {
+    case "Linked List":
+      if (linkedListHeads.length > 0) {
+        primary.push({ kind: "linkedlist", headVars: linkedListHeads, pointerVars: pointers });
+      }
+      break;
+
     case "Stack":
       stacks.forEach((v) => primary.push({ kind: "stack", varName: v }));
       mainArrays.forEach((v) => secondary.push({ kind: "array", varName: v }));
