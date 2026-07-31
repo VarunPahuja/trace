@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  --color-paper: #fdf6e3;
+  --color-ink: #111111;
+  --color-accent: #4f46e5;
+  --color-pop: #f59e0b;
+  --color-go: #10b981;
+  --color-alarm: #ef4444;
+  --color-editor-bg: #16161d;
+}
+
+@theme inline {
+  --color-paper: var(--color-paper);
+  --color-ink: var(--color-ink);
+  --color-accent: var(--color-accent);
+  --color-pop: var(--color-pop);
+  --color-go: var(--color-go);
+  --color-alarm: var(--color-alarm);
+  --color-editor-bg: var(--color-editor-bg);
+
+  --font-display: var(--font-archivo-black), "Arial Black", sans-serif;
+  --font-body: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+/* Neobrutalist chrome: hard borders + offset shadows + press interaction.
+   Defined via @utility (not @layer components) so Tailwind v4 registers
+   these as real utilities that @apply can compose further down. */
+@utility border-neo {
+  border: 3px solid var(--color-ink);
+}
+
+@utility shadow-neo {
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+}
+
+@utility shadow-neo-sm {
+  box-shadow: 2px 2px 0 0 var(--color-ink);
+}
+
+@utility press-neo {
+  transition: transform 100ms ease, box-shadow 100ms ease;
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 0 var(--color-ink);
+  }
+}
+
+@utility btn-neo {
+  @apply border-neo shadow-neo press-neo font-display uppercase tracking-tight bg-paper text-ink rounded-[12px] px-4 py-2 cursor-pointer select-none;
+}
+
+@utility btn-neo-accent {
+  @apply btn-neo bg-accent text-paper;
+}
+
+@utility card-neo {
+  @apply border-neo shadow-neo rounded-[14px] bg-paper;
+}
+
+.marquee-track {
+  display: inline-flex;
+  animation: marquee-scroll 22s linear infinite;
+}
+
+.marquee-viewport:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-track span {
+  display: inline-block;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
