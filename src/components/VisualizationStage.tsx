@@ -8,6 +8,7 @@ import StackRenderer from "./renderers/StackRenderer";
 import WindowOverlay from "./renderers/WindowOverlay";
 import LinkedListRenderer from "./renderers/LinkedListRenderer";
 import TreeRenderer from "./renderers/TreeRenderer";
+import GridRenderer from "./renderers/GridRenderer";
 
 function renderSpec(spec: RendererSpec, key: string) {
   switch (spec.kind) {
@@ -33,6 +34,8 @@ function renderSpec(spec: RendererSpec, key: string) {
       return <LinkedListRenderer key={key} headVars={spec.headVars} pointerVars={spec.pointerVars} />;
     case "tree":
       return <TreeRenderer key={key} rootVars={spec.rootVars} pointerVars={spec.pointerVars} />;
+    case "grid":
+      return <GridRenderer key={key} varName={spec.varName} />;
     default:
       return null;
   }

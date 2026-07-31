@@ -13,6 +13,10 @@ import { reverseLinkedListExample } from "./reverseLinkedList";
 import { mergeTwoSortedListsExample } from "./mergeTwoSortedLists";
 import { bstInsertInorderExample } from "./bstInsertInorder";
 import { maxDepthExample } from "./maxDepth";
+import { climbingStairsExample } from "./climbingStairs";
+import { houseRobberExample } from "./houseRobber";
+import { uniquePathsExample } from "./uniquePaths";
+import { longestCommonSubsequenceExample } from "./longestCommonSubsequence";
 
 // Grows toward all 36 (per master.md §13) as each renderer lands in Phase 3.
 export const EXAMPLES: Example[] = [
@@ -30,6 +34,10 @@ export const EXAMPLES: Example[] = [
   mergeTwoSortedListsExample,
   bstInsertInorderExample,
   maxDepthExample,
+  climbingStairsExample,
+  houseRobberExample,
+  uniquePathsExample,
+  longestCommonSubsequenceExample,
 ];
 
 export function groupExamplesByTopic(examples: Example[]): Map<string, Example[]> {

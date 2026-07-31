@@ -16,7 +16,8 @@ export type RendererSpec =
   | { kind: "hashmap"; varName: string }
   | { kind: "stack"; varName: string }
   | { kind: "linkedlist"; headVars: string[]; pointerVars: string[] }
-  | { kind: "tree"; rootVars: string[]; pointerVars: string[] };
+  | { kind: "tree"; rootVars: string[]; pointerVars: string[] }
+  | { kind: "grid"; varName: string };
 
 export interface Scene {
   primary: RendererSpec[];
@@ -44,6 +45,8 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
   const pointers = varsByRole(meta, "pointer");
   const linkedListHeads = varsByRole(meta, "linkedListHead");
   const treeRoots = varsByRole(meta, "treeRoot");
+  const dpTables1D = varsByRole(meta, "dpTable1D");
+  const dpTables2D = varsByRole(meta, "dpTable2D");
   const [windowStart] = varsByRole(meta, "windowStart");
   const [windowEnd] = varsByRole(meta, "windowEnd");
 
@@ -58,6 +61,20 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
       if (treeRoots.length > 0) {
         primary.push({ kind: "tree", rootVars: treeRoots, pointerVars: pointers });
       }
+      break;
+
+    case "1-D DP":
+      dpTables1D.forEach((v) => primary.push({ kind: "array", varName: v }));
+      mainArrays.forEach((v) => secondary.push({ kind: "array", varName: v }));
+      break;
+
+    case "2-D DP":
+      dpTables2D.forEach((v) => primary.push({ kind: "grid", varName: v }));
+      break;
+
+    case "Math & Geometry":
+      dpTables2D.forEach((v) => primary.push({ kind: "grid", varName: v }));
+      mainArrays.forEach((v) => (dpTables2D.length > 0 ? secondary : primary).push({ kind: "array", varName: v }));
       break;
 
     case "Stack":
