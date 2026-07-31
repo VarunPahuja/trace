@@ -20,6 +20,9 @@ export function formatValue(value: SerializedValue | undefined): string {
   if (value.type === "tree") {
     return `tree(${value.nodes.length} nodes)`;
   }
+  if (value.type === "trie") {
+    return `trie(${value.nodes.length} nodes)`;
+  }
   if (value.type === "opaque") {
     return value.repr;
   }

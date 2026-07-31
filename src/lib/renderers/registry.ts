@@ -21,7 +21,9 @@ export type RendererSpec =
   | { kind: "graph"; graphVar: string; visitedVar?: string; pointerVars: string[]; distanceVar?: string }
   | { kind: "interval"; varName: string }
   | { kind: "bits"; varNames: string[] }
-  | { kind: "calltree" };
+  | { kind: "calltree" }
+  | { kind: "trie"; rootVars: string[]; pointerVars: string[] }
+  | { kind: "heap"; varName: string };
 
 export interface Scene {
   primary: RendererSpec[];
@@ -58,6 +60,7 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
   const queues = varsByRole(meta, "queue");
   const intervalLists = varsByRole(meta, "intervalList");
   const bitValues = varsByRole(meta, "bitValue");
+  const heaps = varsByRole(meta, "heap");
   const [windowStart] = varsByRole(meta, "windowStart");
   const [windowEnd] = varsByRole(meta, "windowEnd");
 
@@ -72,6 +75,13 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
       if (treeRoots.length > 0) {
         primary.push({ kind: "tree", rootVars: treeRoots, pointerVars: pointers });
       }
+      break;
+
+    case "Tries":
+      if (treeRoots.length > 0) {
+        primary.push({ kind: "trie", rootVars: treeRoots, pointerVars: pointers });
+      }
+      hashMaps.forEach((v) => secondary.push({ kind: "hashmap", varName: v }));
       break;
 
     case "1-D DP":
@@ -113,6 +123,11 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
 
     case "Backtracking":
       primary.push({ kind: "calltree" });
+      mainArrays.forEach((v) => secondary.push({ kind: "array", varName: v }));
+      break;
+
+    case "Heap/Priority Queue":
+      heaps.forEach((v) => primary.push({ kind: "heap", varName: v }));
       mainArrays.forEach((v) => secondary.push({ kind: "array", varName: v }));
       break;
 

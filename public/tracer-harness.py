@@ -26,6 +26,7 @@ _WALLCLOCK_CAP_S = 8.0
 _LIST_DEPTH_CAP = 4
 _LINKEDLIST_NODE_CAP = 50
 _TREE_NODE_CAP = 63
+_TRIE_NODE_CAP = 63
 
 
 class _CapExceeded(Exception):
@@ -73,6 +74,8 @@ def __trace_run(source_code):
             return serialize_linked_list(value)
         if hasattr(value, "val") and hasattr(value, "left") and hasattr(value, "right"):
             return serialize_tree(value)
+        if hasattr(value, "children"):
+            return serialize_trie(value)
         return _opaque(value)
 
     def _opaque(value):
@@ -131,6 +134,37 @@ def __trace_run(source_code):
             if right is not None and id(right) not in visited:
                 stack.append(right)
         return {"type": "tree", "nodes": nodes, "rootId": root_id}
+
+    def serialize_trie(root):
+        nodes = []
+        visited = {}
+        root_id = get_node_id(root)
+        stack = [root]
+        while stack and len(nodes) < _TRIE_NODE_CAP:
+            node = stack.pop()
+            key = id(node)
+            if key in visited:
+                continue
+            node_id = get_node_id(node)
+            visited[key] = node_id
+            children_dict = getattr(node, "children", None) or {}
+            child_entries = []
+            for label, child in children_dict.items():
+                if child is None:
+                    continue
+                child_id = get_node_id(child)
+                child_entries.append([serialize(label, 1), child_id])
+                if id(child) not in visited:
+                    stack.append(child)
+            entry = {
+                "id": node_id,
+                "val": serialize(getattr(node, "val", None), 1),
+                "children": child_entries,
+            }
+            if hasattr(node, "is_word"):
+                entry["isWord"] = bool(getattr(node, "is_word"))
+            nodes.append(entry)
+        return {"type": "trie", "nodes": nodes, "rootId": root_id}
 
     def snapshot_locals(frame):
         out = {}

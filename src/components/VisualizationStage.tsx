@@ -13,6 +13,8 @@ import GraphRenderer from "./renderers/GraphRenderer";
 import IntervalRenderer from "./renderers/IntervalRenderer";
 import BitsRenderer from "./renderers/BitsRenderer";
 import CallTreeRenderer from "./renderers/CallTreeRenderer";
+import TrieRenderer from "./renderers/TrieRenderer";
+import HeapRenderer from "./renderers/HeapRenderer";
 
 function renderSpec(spec: RendererSpec, key: string) {
   switch (spec.kind) {
@@ -56,6 +58,10 @@ function renderSpec(spec: RendererSpec, key: string) {
       return <BitsRenderer key={key} varNames={spec.varNames} />;
     case "calltree":
       return <CallTreeRenderer key={key} />;
+    case "trie":
+      return <TrieRenderer key={key} rootVars={spec.rootVars} pointerVars={spec.pointerVars} />;
+    case "heap":
+      return <HeapRenderer key={key} varName={spec.varName} />;
     default:
       return null;
   }

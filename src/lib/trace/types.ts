@@ -43,6 +43,21 @@ export interface SerializedTree {
   rootId: number | null;
 }
 
+/** n-ary tree node (Tries) — master.md §9.6 "n-ary variant: children array". */
+export interface SerializedTrieNode {
+  id: number;
+  val: SerializedValue;
+  /** [edgeLabel, childId] pairs — e.g. [char, nodeId] for a Trie. */
+  children: [SerializedValue, number][];
+  isWord?: boolean;
+}
+
+export interface SerializedTrie {
+  type: "trie";
+  nodes: SerializedTrieNode[];
+  rootId: number | null;
+}
+
 export interface SerializedOpaque {
   type: "opaque";
   repr: string;
@@ -55,6 +70,7 @@ export type SerializedValue =
   | SerializedSet
   | SerializedLinkedList
   | SerializedTree
+  | SerializedTrie
   | SerializedOpaque;
 
 export type TraceEventKind = "line" | "call" | "return";
