@@ -25,6 +25,10 @@ import { mergeIntervalsExample } from "./mergeIntervals";
 import { insertIntervalExample } from "./insertInterval";
 import { jumpGameExample } from "./jumpGame";
 import { maximumSubarrayExample } from "./maximumSubarray";
+import { singleNumberExample } from "./singleNumber";
+import { countingBitsExample } from "./countingBits";
+import { rotateImageExample } from "./rotateImage";
+import { powXNExample } from "./powXN";
 
 // Grows toward all 36 (per master.md §13) as each renderer lands in Phase 3.
 export const EXAMPLES: Example[] = [
@@ -54,6 +58,10 @@ export const EXAMPLES: Example[] = [
   insertIntervalExample,
   jumpGameExample,
   maximumSubarrayExample,
+  singleNumberExample,
+  countingBitsExample,
+  rotateImageExample,
+  powXNExample,
 ];
 
 export function groupExamplesByTopic(examples: Example[]): Map<string, Example[]> {
