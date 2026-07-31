@@ -83,6 +83,13 @@ export default function VisualizationStage() {
       </div>
     );
   }
+  if (status === "preprocessing") {
+    return (
+      <div className="flex-1 min-h-[420px] flex items-center justify-center font-body text-ink/60">
+        reading your code…
+      </div>
+    );
+  }
   if (status === "warming") {
     return (
       <div className="flex-1 min-h-[420px] flex items-center justify-center font-body text-ink/60">

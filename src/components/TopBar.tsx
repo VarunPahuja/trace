@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Marquee from "./Marquee";
 import ShareButton from "./ShareButton";
+import TopicBadge from "./TopicBadge";
 
 export default function TopBar() {
   return (
@@ -10,12 +11,7 @@ export default function TopBar() {
           <span className="font-display text-lg sm:text-2xl uppercase tracking-tight text-ink -rotate-2 inline-block shadow-neo-sm border-neo bg-pop px-2 py-0.5">
             TRACE
           </span>
-          <span
-            id="topic-badge"
-            className="hidden sm:inline-block font-body text-xs uppercase tracking-wide border-neo rounded-full px-3 py-1 bg-paper text-ink/60"
-          >
-            no topic loaded
-          </span>
+          <TopicBadge />
         </div>
 
         <nav className="flex items-center gap-3 sm:gap-4 font-display text-xs sm:text-sm uppercase tracking-tight">

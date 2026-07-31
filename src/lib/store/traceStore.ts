@@ -6,7 +6,7 @@ import { computeStepDiffs, type StepDiff } from "@/lib/trace/diff";
 import type { Example, PreprocessMeta } from "@/lib/trace/meta";
 import { getPyodideClient } from "@/lib/trace/pyodideClient";
 
-export type RunStatus = "idle" | "warming" | "running" | "ready" | "error";
+export type RunStatus = "idle" | "preprocessing" | "warming" | "running" | "ready" | "error";
 
 interface TraceState {
   code: string;
@@ -79,11 +79,48 @@ export const useTraceStore = create<TraceState>((set, get) => ({
   },
 
   visualize: async () => {
-    const { code, activeExample } = get();
+    const { code, activeExample, input } = get();
     if (!code.trim()) {
       set({ status: "error", errorMessage: "Paste some Python code first.", errorLine: null });
       return;
     }
+
+    let codeToRun = code;
+    let meta = activeExample?.meta ?? get().meta;
+
+    // Clear the previous run's trace immediately — otherwise the control
+    // deck/stage keep showing stale step data (e.g. "1/17" from the last
+    // run) while a new preprocess/trace is in flight, which reads as a
+    // finished result even though status is still preprocessing/warming.
+    set({ steps: [], diffs: [], currentStep: 0, truncated: false });
+
+    // Built-in examples ship hand-authored meta and never need the LLM
+    // pass (§5); anything else (pasted/edited code) goes through
+    // /api/preprocess first so the trace binds to the right renderers.
+    if (!activeExample) {
+      set({ status: "preprocessing", playing: false, errorMessage: null, errorLine: null });
+      try {
+        const res = await fetch("/api/preprocess", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code, userInput: input || undefined }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          set({ status: "error", errorMessage: data.message ?? "Couldn't read that code.", errorLine: null });
+          return;
+        }
+        codeToRun = data.normalizedCode;
+        meta = { topic: data.topic, subPattern: data.subPattern, roles: data.roles, inputDescription: data.inputDescription };
+        // Swap the editor to the normalized source so line-highlighting
+        // during playback points at the code that actually ran.
+        set({ code: codeToRun });
+      } catch {
+        set({ status: "error", errorMessage: "Couldn't reach the preprocessing service.", errorLine: null });
+        return;
+      }
+    }
+
     set({ status: "warming", playing: false, errorMessage: null, errorLine: null });
 
     const client = getPyodideClient();
@@ -106,7 +143,7 @@ export const useTraceStore = create<TraceState>((set, get) => ({
     }
 
     set({ status: "running" });
-    const result: TraceResult = await client.runTrace(code);
+    const result: TraceResult = await client.runTrace(codeToRun);
 
     if (result.error) {
       set({
@@ -125,7 +162,7 @@ export const useTraceStore = create<TraceState>((set, get) => ({
       diffs: computeStepDiffs(result.steps),
       truncated: result.truncated,
       currentStep: 0,
-      meta: activeExample?.meta ?? get().meta,
+      meta,
     });
   },
 

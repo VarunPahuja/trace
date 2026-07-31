@@ -5,7 +5,7 @@ import { useTraceStore } from "@/lib/store/traceStore";
 export default function VisualizeButton() {
   const visualize = useTraceStore((s) => s.visualize);
   const status = useTraceStore((s) => s.status);
-  const busy = status === "warming" || status === "running";
+  const busy = status === "preprocessing" || status === "warming" || status === "running";
 
   return (
     <button
