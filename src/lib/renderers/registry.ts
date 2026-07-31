@@ -15,7 +15,8 @@ export type RendererSpec =
     }
   | { kind: "hashmap"; varName: string }
   | { kind: "stack"; varName: string }
-  | { kind: "linkedlist"; headVars: string[]; pointerVars: string[] };
+  | { kind: "linkedlist"; headVars: string[]; pointerVars: string[] }
+  | { kind: "tree"; rootVars: string[]; pointerVars: string[] };
 
 export interface Scene {
   primary: RendererSpec[];
@@ -42,6 +43,7 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
   const stacks = varsByRole(meta, "stack");
   const pointers = varsByRole(meta, "pointer");
   const linkedListHeads = varsByRole(meta, "linkedListHead");
+  const treeRoots = varsByRole(meta, "treeRoot");
   const [windowStart] = varsByRole(meta, "windowStart");
   const [windowEnd] = varsByRole(meta, "windowEnd");
 
@@ -49,6 +51,12 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
     case "Linked List":
       if (linkedListHeads.length > 0) {
         primary.push({ kind: "linkedlist", headVars: linkedListHeads, pointerVars: pointers });
+      }
+      break;
+
+    case "Trees":
+      if (treeRoots.length > 0) {
+        primary.push({ kind: "tree", rootVars: treeRoots, pointerVars: pointers });
       }
       break;
 
