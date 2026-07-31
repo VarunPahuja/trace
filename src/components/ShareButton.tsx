@@ -1,13 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { useTraceStore } from "@/lib/store/traceStore";
+import { encodeSharePayload } from "@/lib/share/sharePayload";
 
 export default function ShareButton() {
   const [copied, setCopied] = useState(false);
+  const code = useTraceStore((s) => s.code);
+  const input = useTraceStore((s) => s.input);
+  const activeExample = useTraceStore((s) => s.activeExample);
 
   async function handleShare() {
+    const encoded = encodeSharePayload({ code, input, exampleId: activeExample?.id });
+    const url = `${window.location.origin}/v?d=${encoded}`;
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
     } catch {

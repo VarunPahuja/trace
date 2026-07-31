@@ -3,6 +3,7 @@ import { Archivo_Black, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import TopBar from "@/components/TopBar";
 import MobileBanner from "@/components/MobileBanner";
+import MotionConfigProvider from "@/components/MotionConfigProvider";
 
 const archivoBlack = Archivo_Black({
   variable: "--font-archivo-black",
@@ -37,9 +38,11 @@ export default function RootLayout({
       className={`${archivoBlack.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body bg-paper text-ink">
-        <TopBar />
-        <MobileBanner />
-        <main className="flex-1 flex flex-col">{children}</main>
+        <MotionConfigProvider>
+          <TopBar />
+          <MobileBanner />
+          <main className="flex-1 flex flex-col">{children}</main>
+        </MotionConfigProvider>
       </body>
     </html>
   );

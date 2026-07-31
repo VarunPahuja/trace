@@ -8,8 +8,10 @@ import VisualizationStage from "@/components/VisualizationStage";
 import ControlDeck from "@/components/ControlDeck";
 import VariablesStrip from "@/components/VariablesStrip";
 import { useTraceStore } from "@/lib/store/traceStore";
+import { useKeyboardShortcuts } from "@/lib/store/useKeyboardShortcuts";
 
 export default function WorkspacePage() {
+  useKeyboardShortcuts();
   const input = useTraceStore((s) => s.input);
   const setInput = useTraceStore((s) => s.setInput);
 

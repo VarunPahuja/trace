@@ -73,6 +73,7 @@ export default function VisualizationStage() {
   const truncated = useTraceStore((s) => s.truncated);
   const meta = useTraceStore((s) => s.meta);
   const steps = useTraceStore((s) => s.steps);
+  const visualize = useTraceStore((s) => s.visualize);
 
   const scene = resolveScene(meta);
 
@@ -107,9 +108,12 @@ export default function VisualizationStage() {
   if (status === "error") {
     return (
       <div className="flex-1 min-h-[420px] flex items-center justify-center p-6">
-        <div className="border-4 border-alarm shadow-neo rounded-[14px] bg-alarm/10 p-4 max-w-md text-center">
-          <div className="font-display uppercase text-alarm mb-2">Couldn&apos;t run that</div>
+        <div className="border-4 border-alarm shadow-neo rounded-[14px] bg-alarm/10 p-4 max-w-md text-center flex flex-col items-center gap-3">
+          <div className="font-display uppercase text-alarm">Couldn&apos;t run that</div>
           <div className="font-mono text-sm text-ink/80 whitespace-pre-wrap">{errorMessage}</div>
+          <button type="button" onClick={() => void visualize()} className="btn-neo text-xs py-1.5">
+            Retry
+          </button>
         </div>
       </div>
     );

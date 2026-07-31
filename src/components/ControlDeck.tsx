@@ -3,8 +3,7 @@
 import { useMemo } from "react";
 import { useTraceStore } from "@/lib/store/traceStore";
 import { usePlaybackTicker } from "@/lib/store/usePlaybackTicker";
-
-const SPEEDS = [0.25, 0.5, 1, 2, 4];
+import { SPEEDS } from "@/lib/store/playbackSpeeds";
 
 export default function ControlDeck() {
   usePlaybackTicker();
