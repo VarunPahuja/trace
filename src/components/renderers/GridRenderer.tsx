@@ -7,13 +7,16 @@ import type { SerializedValue } from "@/lib/trace/types";
 
 interface GridRendererProps {
   varName: string;
+  rowVar?: string;
+  colVar?: string;
 }
 
 const CELL = 36;
 
-/** master.md §9.8 — 2-D matrix of cells; write = fill flash. Dependency
- * arrows are a later polish item, scoped out for the time budget here. */
-export default function GridRenderer({ varName }: GridRendererProps) {
+/** master.md §9.8 — 2-D matrix of cells; write = fill flash. An optional
+ * row/col pointer pair (e.g. DFS floodfill coordinates) rings the current
+ * cell. Dependency arrows are a later polish item, scoped out for now. */
+export default function GridRenderer({ varName, rowVar, colVar }: GridRendererProps) {
   const steps = useTraceStore((s) => s.steps);
   const currentStep = useTraceStore((s) => s.currentStep);
   const step = steps[currentStep];
@@ -28,6 +31,10 @@ export default function GridRenderer({ varName }: GridRendererProps) {
   const prevGrid =
     Array.isArray(prevValue) && Array.isArray(prevValue[0]) ? (prevValue as SerializedValue[][]) : null;
 
+  const curRow = rowVar ? step.locals[rowVar] : undefined;
+  const curCol = colVar ? step.locals[colVar] : undefined;
+  const hasCurrent = typeof curRow === "number" && typeof curCol === "number";
+
   return (
     <div className="flex flex-col gap-1">
       <div className="font-mono text-xs text-ink/50">{varName}</div>
@@ -37,12 +44,15 @@ export default function GridRenderer({ varName }: GridRendererProps) {
             {row.map((cell, c) => {
               const changed =
                 prevGrid?.[r]?.[c] !== undefined && JSON.stringify(prevGrid[r][c]) !== JSON.stringify(cell);
+              const isCurrent = hasCurrent && curRow === r && curCol === c;
               return (
                 <motion.div
                   key={c}
                   animate={{ backgroundColor: changed ? ["#4F46E5", "#FDF6E3"] : "#FDF6E3" }}
                   transition={{ duration: 0.24 }}
-                  className="flex items-center justify-center border-2 border-ink rounded-md font-mono text-xs text-ink"
+                  className={`flex items-center justify-center border-2 rounded-md font-mono text-xs text-ink ${
+                    isCurrent ? "border-pop ring-2 ring-pop" : "border-ink"
+                  }`}
                   style={{ width: CELL, height: CELL }}
                 >
                   {formatValue(cell)}

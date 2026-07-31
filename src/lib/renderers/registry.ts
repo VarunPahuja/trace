@@ -17,7 +17,8 @@ export type RendererSpec =
   | { kind: "stack"; varName: string }
   | { kind: "linkedlist"; headVars: string[]; pointerVars: string[] }
   | { kind: "tree"; rootVars: string[]; pointerVars: string[] }
-  | { kind: "grid"; varName: string };
+  | { kind: "grid"; varName: string; rowVar?: string; colVar?: string }
+  | { kind: "graph"; graphVar: string; visitedVar?: string; pointerVars: string[]; distanceVar?: string };
 
 export interface Scene {
   primary: RendererSpec[];
@@ -32,6 +33,8 @@ function varsByRole(meta: PreprocessMeta, role: VariableRole): string[] {
 
 const LOWER_BOUND_NAMES = new Set(["l", "left", "lo"]);
 const UPPER_BOUND_NAMES = new Set(["r", "right", "hi"]);
+const ROW_NAMES = new Set(["r", "row"]);
+const COL_NAMES = new Set(["c", "col", "column"]);
 
 export function resolveScene(meta: PreprocessMeta | null): Scene {
   const primary: RendererSpec[] = [];
@@ -47,6 +50,9 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
   const treeRoots = varsByRole(meta, "treeRoot");
   const dpTables1D = varsByRole(meta, "dpTable1D");
   const dpTables2D = varsByRole(meta, "dpTable2D");
+  const graphs = varsByRole(meta, "graph");
+  const visitedSets = varsByRole(meta, "visitedSet");
+  const queues = varsByRole(meta, "queue");
   const [windowStart] = varsByRole(meta, "windowStart");
   const [windowEnd] = varsByRole(meta, "windowEnd");
 
@@ -76,6 +82,25 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
       dpTables2D.forEach((v) => primary.push({ kind: "grid", varName: v }));
       mainArrays.forEach((v) => (dpTables2D.length > 0 ? secondary : primary).push({ kind: "array", varName: v }));
       break;
+
+    case "Graphs":
+    case "Advanced Graphs": {
+      if (graphs.length > 0) {
+        const distanceVar = meta.topic === "Advanced Graphs" ? hashMaps[0] : undefined;
+        graphs.forEach((v) =>
+          primary.push({ kind: "graph", graphVar: v, visitedVar: visitedSets[0], pointerVars: pointers, distanceVar }),
+        );
+      } else {
+        // Grid-shaped graph input (e.g. Number of Islands) — GridRenderer,
+        // not GraphRenderer, per the grid/graph split.
+        const rowVar = pointers.find((p) => ROW_NAMES.has(p));
+        const colVar = pointers.find((p) => COL_NAMES.has(p));
+        dpTables2D.forEach((v) => primary.push({ kind: "grid", varName: v, rowVar, colVar }));
+      }
+      mainArrays.forEach((v) => secondary.push({ kind: "array", varName: v }));
+      queues.forEach((v) => secondary.push({ kind: "array", varName: v }));
+      break;
+    }
 
     case "Stack":
       stacks.forEach((v) => primary.push({ kind: "stack", varName: v }));

@@ -49,6 +49,13 @@ def __trace_run(source_code):
         return node_registry[key]
 
     def serialize(value, depth=0):
+        if isinstance(value, float) and (value != value or value in (float("inf"), float("-inf"))):
+            # json.dumps emits non-standard Infinity/-Infinity/NaN tokens
+            # that JS's JSON.parse rejects — common sentinel values (e.g.
+            # float('inf') in shortest-path algorithms), so stringify them.
+            if value != value:
+                return "NaN"
+            return "Infinity" if value > 0 else "-Infinity"
         if value is None or isinstance(value, (bool, int, float, str)):
             return value
         if depth >= _LIST_DEPTH_CAP:
