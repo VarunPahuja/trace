@@ -1,6 +1,11 @@
-// Hardcoded Two Sum source for Phase 1 execution-core validation.
-// Full example objects (with meta/intuition/etc, per master.md §13) land in Phase 3.
-export const TWO_SUM_SOURCE = `def twoSum(nums, target):
+import type { Example } from "@/lib/trace/meta";
+
+export const twoSumExample: Example = {
+  id: "two-sum",
+  topic: "Arrays & Hashing",
+  name: "Two Sum",
+  difficulty: "Easy",
+  code: `def twoSum(nums, target):
     seen = {}
     for i, num in enumerate(nums):
         complement = target - num
@@ -12,4 +17,22 @@ export const TWO_SUM_SOURCE = `def twoSum(nums, target):
 nums = [2, 7, 11, 15]
 target = 9
 result = twoSum(nums, target)
-`;
+`,
+  input: "nums = [2, 7, 11, 15], target = 9",
+  intuition:
+    "You could check every pair, but your hash map has a better memory than you do. Walk the array once, and for each number ask the map \"have I already seen your missing half?\" The moment it says yes, you're done.",
+  meta: {
+    topic: "Arrays & Hashing",
+    subPattern: "hash map complement lookup",
+    roles: {
+      nums: "mainArray",
+      target: "target",
+      seen: "hashMap",
+      i: "pointer",
+      num: "other",
+      complement: "other",
+      result: "resultVar",
+    },
+    inputDescription: "A small integer array and a target sum.",
+  },
+};
