@@ -1,3 +1,5 @@
+import Phase1TraceTest from "@/components/Phase1TraceTest";
+
 export default function WorkspacePage() {
   return (
     <div className="flex-1 flex flex-col lg:flex-row gap-6 p-6 max-w-[1600px] w-full mx-auto">
@@ -10,6 +12,7 @@ export default function WorkspacePage() {
         <button type="button" disabled className="btn-neo-accent opacity-50 cursor-not-allowed">
           Visualize
         </button>
+        <Phase1TraceTest />
       </section>
 
       {/* Right panel ~58%: visualization stage + controls (wired in Phase 2/3) */}
