@@ -12,6 +12,7 @@ import GridRenderer from "./renderers/GridRenderer";
 import GraphRenderer from "./renderers/GraphRenderer";
 import IntervalRenderer from "./renderers/IntervalRenderer";
 import BitsRenderer from "./renderers/BitsRenderer";
+import CallTreeRenderer from "./renderers/CallTreeRenderer";
 
 function renderSpec(spec: RendererSpec, key: string) {
   switch (spec.kind) {
@@ -53,6 +54,8 @@ function renderSpec(spec: RendererSpec, key: string) {
       return <IntervalRenderer key={key} varName={spec.varName} />;
     case "bits":
       return <BitsRenderer key={key} varNames={spec.varNames} />;
+    case "calltree":
+      return <CallTreeRenderer key={key} />;
     default:
       return null;
   }

@@ -20,7 +20,8 @@ export type RendererSpec =
   | { kind: "grid"; varName: string; rowVar?: string; colVar?: string }
   | { kind: "graph"; graphVar: string; visitedVar?: string; pointerVars: string[]; distanceVar?: string }
   | { kind: "interval"; varName: string }
-  | { kind: "bits"; varNames: string[] };
+  | { kind: "bits"; varNames: string[] }
+  | { kind: "calltree" };
 
 export interface Scene {
   primary: RendererSpec[];
@@ -108,6 +109,11 @@ export function resolveScene(meta: PreprocessMeta | null): Scene {
 
     case "Intervals":
       intervalLists.forEach((v) => primary.push({ kind: "interval", varName: v }));
+      break;
+
+    case "Backtracking":
+      primary.push({ kind: "calltree" });
+      mainArrays.forEach((v) => secondary.push({ kind: "array", varName: v }));
       break;
 
     case "Bit Manipulation":

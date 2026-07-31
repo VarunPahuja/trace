@@ -29,6 +29,8 @@ import { singleNumberExample } from "./singleNumber";
 import { countingBitsExample } from "./countingBits";
 import { rotateImageExample } from "./rotateImage";
 import { powXNExample } from "./powXN";
+import { subsetsExample } from "./subsets";
+import { permutationsExample } from "./permutations";
 
 // Grows toward all 36 (per master.md §13) as each renderer lands in Phase 3.
 export const EXAMPLES: Example[] = [
@@ -62,6 +64,8 @@ export const EXAMPLES: Example[] = [
   countingBitsExample,
   rotateImageExample,
   powXNExample,
+  subsetsExample,
+  permutationsExample,
 ];
 
 export function groupExamplesByTopic(examples: Example[]): Map<string, Example[]> {
