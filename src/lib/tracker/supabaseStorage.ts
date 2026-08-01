@@ -49,7 +49,7 @@ function inputToRow(input: TrackerEntryInput) {
 }
 
 export async function fetchCloudEntries(): Promise<TrackerEntry[]> {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   if (!supabase) return [];
   const { data, error } = await supabase
     .from(TABLE)
@@ -64,7 +64,7 @@ export async function fetchCloudEntries(): Promise<TrackerEntry[]> {
 
 /** Insert a brand-new entry — lets Postgres generate the id/created_at. */
 export async function insertCloudEntry(userId: string, input: TrackerEntryInput): Promise<TrackerEntry | null> {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   if (!supabase) return null;
   const { data, error } = await supabase
     .from(TABLE)
@@ -82,7 +82,7 @@ export async function insertCloudEntry(userId: string, input: TrackerEntryInput)
  * created_at — both are already valid uuid/timestamptz values since the
  * entry came from this same table originally. */
 export async function restoreCloudEntry(userId: string, entry: TrackerEntry): Promise<TrackerEntry | null> {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   if (!supabase) return null;
   const { id, createdAt, ...rest } = entry;
   const { data, error } = await supabase
@@ -98,7 +98,7 @@ export async function restoreCloudEntry(userId: string, entry: TrackerEntry): Pr
 }
 
 export async function updateCloudEntry(id: string, patch: Partial<TrackerEntryInput>): Promise<void> {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   if (!supabase) return;
   const dbPatch: Record<string, unknown> = {};
   if (patch.name !== undefined) dbPatch.name = patch.name;
@@ -114,7 +114,7 @@ export async function updateCloudEntry(id: string, patch: Partial<TrackerEntryIn
 }
 
 export async function deleteCloudEntry(id: string): Promise<void> {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   if (!supabase) return;
   const { error } = await supabase.from(TABLE).delete().eq("id", id);
   if (error) console.error("tracker: delete failed", error.message);
@@ -124,7 +124,7 @@ export async function deleteCloudEntry(id: string): Promise<void> {
  * aren't reused (local ids aren't valid uuids) but created_at is preserved
  * for chronological accuracy. */
 export async function importCloudEntries(userId: string, entries: TrackerEntry[]): Promise<TrackerEntry[]> {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   if (!supabase || entries.length === 0) return [];
   const rows = entries.map((e) => ({ user_id: userId, created_at: e.createdAt, ...inputToRow(e) }));
   const { data, error } = await supabase.from(TABLE).insert(rows).select();

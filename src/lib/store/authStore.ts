@@ -29,31 +29,32 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ status: "signed-out", initialized: true });
       return;
     }
-    const supabase = getSupabaseBrowserClient();
-    if (!supabase) {
-      set({ status: "signed-out", initialized: true });
-      return;
-    }
+    void getSupabaseBrowserClient().then((supabase) => {
+      if (!supabase) {
+        set({ status: "signed-out", initialized: true });
+        return;
+      }
 
-    supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
-      set({
-        user: data.session?.user ?? null,
-        status: data.session?.user ? "signed-in" : "signed-out",
-        initialized: true,
+      supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
+        set({
+          user: data.session?.user ?? null,
+          status: data.session?.user ? "signed-in" : "signed-out",
+          initialized: true,
+        });
       });
-    });
 
-    supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
-      set({
-        user: session?.user ?? null,
-        status: session?.user ? "signed-in" : "signed-out",
-        initialized: true,
+      supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
+        set({
+          user: session?.user ?? null,
+          status: session?.user ? "signed-in" : "signed-out",
+          initialized: true,
+        });
       });
     });
   },
 
   signOut: async () => {
-    const supabase = getSupabaseBrowserClient();
+    const supabase = await getSupabaseBrowserClient();
     if (!supabase) return;
     await supabase.auth.signOut();
     set({ user: null, status: "signed-out" });

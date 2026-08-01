@@ -21,7 +21,7 @@ function SignInContent() {
   const [busy, setBusy] = useState(false);
 
   async function handleGoogle() {
-    const supabase = getSupabaseBrowserClient();
+    const supabase = await getSupabaseBrowserClient();
     if (!supabase) return;
     setBusy(true);
     setError(null);
@@ -37,8 +37,9 @@ function SignInContent() {
 
   async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
-    const supabase = getSupabaseBrowserClient();
-    if (!supabase || !email.trim()) return;
+    if (!email.trim()) return;
+    const supabase = await getSupabaseBrowserClient();
+    if (!supabase) return;
     setBusy(true);
     setError(null);
     const { error } = await supabase.auth.signInWithOtp({
