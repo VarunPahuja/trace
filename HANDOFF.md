@@ -22,6 +22,12 @@ _This section is updated live as work completes. Each entry: what shipped, how i
 - **Verified tonight:** typecheck/lint/build clean, all 36 examples pass, full tracker CRUD (add/edit/status-cycle/delete/undo/filters/export) smoke-tested against a fresh browser profile in local (unconfigured) mode — byte-identical behavior to before Part A, zero console errors. `.env.local` confirmed never committed to git history.
 - **Not verified tonight (needs your Supabase project):** the actual cloud read/write path, the import-prompt flow end-to-end, Google OAuth redirect, magic-link email delivery. All code-complete per the `@supabase/ssr` docs pattern, but there is no real Supabase project to point at until you create one. See "Manual steps for you" below.
 
+### Part B — Perfection Pass (in progress)
+
+**Animation tuning — done.** Rapid-fire stepping (simulating holding the step-forward key/button) across 16 examples spanning all 11 renderer types found and fixed two real bugs: a CallTreeRenderer crash on settled nodes (spring transition applied to a leftover multi-keyframe array) and a ControlDeck step-counter visual glitch (rapid changes concatenated text sideways instead of crossfading in place). Also audited every renderer's color usage against master.md §12's palette and added the missing alarm-tint on removal (Stack pop, LinkedList node-detach, HashMap key-delete) that master.md specifies but Phase 6 never implemented. Read=pop/write=accent/compare=shared-pop-pulse/discard=30%-opacity/visited=go were already correct from Phase 6.
+
+Per-renderer visual correctness (does each of the 36 examples' specific algorithm animate sensibly) was extensively screenshot-verified during Phase 6 already (2 examples × 3 speeds × step/scrub/play modes per renderer) — tonight's pass focused on the two things Phase 6 couldn't have caught: rapid-interaction desync and a cross-renderer semantic-color audit, both requested explicitly tonight. Did not re-screenshot all 36 examples individually frame-by-frame on top of that existing coverage; flag if you want that additional exhaustive pass.
+
 ---
 
 ## Skipped / Blocked (needs your input)
