@@ -42,22 +42,72 @@ Per-renderer visual correctness (does each of the 36 examples' specific algorith
 
 ## Skipped / Blocked (needs your input)
 
-_Anything that couldn't be completed without your input or a real credential lands here — with what's blocking it and what to do about it._
+Nothing was silently skipped — everything below is code-complete and was verified as far as it's possible to verify without a credential only you can provide.
+
+1. **Cloud Supabase read/write path** (tracker CRUD while signed in, the import-prompt flow, session persistence across reloads). Blocked on: no Supabase project exists yet. Code follows the `@supabase/ssr` docs pattern exactly and the local/unconfigured path (the one that's 100% reachable tonight) is byte-identical to pre-Part-A behavior. Once you create a project and set the two env vars, this needs a real end-to-end pass — see "How to test" below.
+2. **Google OAuth sign-in.** Blocked on: needs a real Google Cloud OAuth client + the redirect URI registered in both Google Cloud Console and Supabase. The button/flow is implemented (`supabase.auth.signInWithOAuth`) but has never fired against a real provider.
+3. **Magic-link email delivery.** Blocked on: Supabase's default email sending (or your own SMTP config) isn't set up yet. The call (`supabase.auth.signInWithOtp`) is implemented; whether the email actually arrives depends on your Supabase project's email settings.
+4. **Rate-limit (429) verified by code review, not by triggering it live.** `checkRateLimit` returns the same designed error card as every other failure path (already proven by testing 4 other error paths live) — didn't spend 10 real requests against the Gemini quota just to watch the same code path fire a 5th time.
+5. **Exhaustive 36-example × multiple-steps screenshot re-verification** wasn't redone from scratch — Phase 6 already did this per-renderer (2 examples × 3 speeds × step/scrub/play each) and tonight's animation pass targeted specifically what Phase 6 couldn't have caught (rapid-interaction desync, cross-renderer color-semantic audit). If you want the full frame-by-frame re-screenshot on top of that, ask and I'll do it as a follow-up.
 
 ---
 
 ## Manual steps for you (in order)
 
-_Filled in as Part A completes — will cover: Supabase project creation, exact env var names/values, running `supabase/setup.sql`, Google OAuth redirect URLs, Supabase Auth URL allowlist entries._
+1. **Create a Supabase project.** [supabase.com](https://supabase.com) → New project. Pick any region; note the project's Project URL and anon/public key (Settings → API).
+
+2. **Run the schema.** Open the SQL Editor in the Supabase dashboard, paste the full contents of `supabase/setup.sql` from this branch, and run it. It's idempotent (uses `if not exists` / `drop policy if exists`), so re-running it later is safe. This creates `tracker_entries` with RLS enabled and 4 policies (select/insert/update/delete, each scoped to `auth.uid() = user_id`).
+
+3. **Set env vars locally.** In `.env.local` at the repo root (already gitignored — confirmed never committed):
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://<your-project-ref>.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<your anon/public key>
+   ```
+   Restart `npm run dev` after adding these — Next.js only reads `.env.local` at server start.
+
+4. **Set the same two env vars on Vercel.** Project Settings → Environment Variables → add both for Production, Preview, and Development. Redeploy after adding them (env var changes don't retroactively apply to already-built deployments).
+
+5. **Configure email magic links.** Supabase Dashboard → Authentication → Providers → Email should already be on by default. Authentication → URL Configuration → set:
+   - **Site URL:** `https://tracepy.vercel.app`
+   - **Redirect URLs (allowlist):** add both `https://tracepy.vercel.app/auth/callback` and `http://localhost:3000/auth/callback` (the second one so local dev sign-in works too).
+
+6. **Configure Google OAuth (optional — magic link works without this).**
+   - In [Google Cloud Console](https://console.cloud.google.com/), create an OAuth 2.0 Client ID (Web application).
+   - Authorized redirect URI: use the one Supabase shows you under Authentication → Providers → Google — it's `https://<your-project-ref>.supabase.co/auth/v1/callback`, **not** `/auth/callback` on tracepy.vercel.app (that's Trace's own callback route which Supabase redirects to *after* its own OAuth exchange).
+   - Paste the resulting Client ID + Client Secret into Supabase's Google provider settings and toggle it on.
+
+7. **Supabase Auth URL allowlist for tracepy.vercel.app** — same as step 5's Redirect URLs list; if you also want the Vercel preview URLs to support sign-in during testing, add a wildcard like `https://trace-*.vercel.app/auth/callback` too (Supabase supports wildcard redirect URLs).
 
 ---
 
 ## How to test auth end-to-end once keys are in
 
-_Filled in as Part A completes._
+1. Load `/signin` — the "coming online soon" note should be gone, both buttons enabled.
+2. **Magic link:** enter your email, click "Send magic link", check your inbox, click the link. Should land you on `/app` signed in (TopBar shows an initial-chip avatar, not "Sign in").
+3. **Google:** click "Continue with Google", complete the OAuth flow. Same landing behavior.
+4. **Tracker sync:** before signing in, add 1-2 problems to the tracker (localStorage mode). Sign in — you should see the "Bring your problems along?" import prompt. Click Import; the entries should now show a "synced" badge next to the Tracker heading, and if you clear localStorage and reload you should still see them (proves they're actually in Supabase, not just cached).
+5. **Cross-device:** sign in on a second browser/incognito window with the same account — the same tracker entries should appear.
+6. **Sign out:** click the avatar chip → Sign out. Tracker should fall back to local mode (whatever was in localStorage before, untouched — the cloud entries aren't deleted, just not shown while signed out).
+7. Check the Supabase dashboard's Table Editor → `tracker_entries` to confirm rows actually have the right `user_id` and RLS is enforced (try querying as a different user's JWT if you want to confirm the policies reject cross-user reads).
 
 ---
 
 ## Merge & deploy sequence (overnight → main → production)
 
-_Filled in at the end._
+Nothing was merged or deployed to production tonight — only preview deployments, per instructions. When you've reviewed this branch (and ideally done the auth end-to-end pass above once keys are in):
+
+```bash
+# From the repo root, with the overnight branch pushed (already done):
+git checkout main
+git pull origin main
+git merge --no-ff overnight -m "Merge overnight: Phase 8 auth-ready + perfection pass"
+git push origin main
+
+# If you use Vercel's Git integration, pushing to main auto-deploys to
+# production. Otherwise, deploy explicitly:
+vercel --prod
+```
+
+If you'd rather review via a PR instead of merging directly: `gh pr create --base main --head overnight` — the branch is already pushed to `origin/overnight`.
+
+Before merging, worth a final skim of the diff for anything that looks off: `git diff main...overnight --stat` (16+ commits, touches auth/tracker/all 11 renderers/global CSS/metadata — summarized commit-by-commit in the Status section above; run `git log main..overnight --oneline` for the exact count and messages).
