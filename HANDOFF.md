@@ -38,6 +38,20 @@ Per-renderer visual correctness (does each of the 36 examples' specific algorith
 
 **Performance — done, found a real bug.** `AuthNav`/`AuthInit` mount globally (every route needs the sign-in link), and the Supabase client factory statically imported `@supabase/ssr` — so `@supabase/auth-js` (measured 498KB) was loading on *every* route including the landing page, regardless of configuration, directly regressing Phase 7's "no heavy bundle on landing" guarantee. Fixed with a dynamic `import()` that only fetches the SDK once `isSupabaseConfigured()` is actually true; landing page's Supabase JS dropped from 498KB to 0.6KB. Also confirmed scrub performance stays under 75ms even on a synthetic 800-step trace (the 36 built-in examples top out around 200 steps by design, so none reach "500+" through normal use).
 
+### Final: preview deploy + full regression against preview — DONE
+
+Deployed as a **preview** deployment (Vercel `target: null`, confirmed not production): `https://trace-all9oyg7x-varunps-projects.vercel.app`. Preview deployments on this Vercel team have SSO/Deployment Protection enabled by default, so testing them with Playwright needed a bypass token (`vercel curl` auto-generates one scoped to this project).
+
+**A genuinely interesting testing-infrastructure bug along the way, worth knowing about for future overnight runs:** my first few regression attempts against the preview all failed with Pyodide's CDN fetch (`cdn.jsdelivr.net`) throwing `net::ERR_FAILED` inside the browser — but only ever on the *preview* URL, never on production, and never in 12+ hours of local dev testing. Root cause: I'd set the bypass token via Playwright's `extraHTTPHeaders`, which applies to **every** outgoing request from that browser context — including the page's own client-side fetch to the third-party Pyodide CDN. jsdelivr was rejecting the request outright because of the unexpected custom header. Switching to Vercel's other supported method — a one-time bypass via `?x-vercel-protection-bypass=...&x-vercel-set-bypass-cookie=true` query params on the first navigation, which sets a same-origin-only cookie instead of a blanket header — fixed it completely. **This was a bug in my test harness, not in the app** (nothing in tonight's diff touches Pyodide loading, CDN fetching, or CSP), but it burned real time to diagnose, so documenting it here in case a future session hits the same wall.
+
+With that fixed:
+- **All 36 examples**, full regression (load, scrub across 5 points, step forward ×2, play 4× briefly): **36/36 pass, 0 console/page errors**, against the live preview deployment.
+- **LLM path, 2 unseen snippets** (a recursive Fibonacci, a set-intersection) — both preprocessed and executed successfully with zero console errors. Both landed on the designed "no renderer matched this trace yet — check the variables strip below" fallback rather than a crash, which is *correct*: neither snippet has a trackable data structure (just ints/sets with no role a renderer binds to), so master.md's opaque/unsupported-structure fallback is exactly what should show.
+- **Share round-trip**: generated a share link from one browser profile, opened it in a completely separate fresh profile, landed correctly on `/app` with the traced example loaded.
+- **Keyboard shortcuts**: → advanced a step, Space toggled play, confirmed working.
+- **Landing demo loop**: loads in ~920ms, populates with real animated data within 2 seconds, zero console errors.
+- **Tracker CRUD**: re-verified extensively on local dev (not re-run against preview specifically) — it's pure client-side localStorage logic with zero server/environment dependency, so local coverage is representative. Cloud-mode tracker CRUD is the one item genuinely blocked on you creating a Supabase project (see below).
+
 ---
 
 ## Skipped / Blocked (needs your input)
