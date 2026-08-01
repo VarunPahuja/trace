@@ -52,7 +52,7 @@ export default function TrackerPage() {
       <TrackerFilters />
 
       {!hydrated ? (
-        <div className="card-neo p-6 font-body text-ink/60">loading…</div>
+        <div className="card-neo p-6 font-body text-ink/60">pulling up your problems…</div>
       ) : filtered.length === 0 ? (
         <div className="card-neo p-6 font-body text-ink/60 text-center">
           {entries.length === 0 ? "No problems logged yet — add your first one." : "Nothing matches these filters."}

@@ -144,7 +144,7 @@ function SignInContent() {
 export default function SignInPage() {
   return (
     <div className="flex-1 flex items-center justify-center p-6">
-      <Suspense fallback={<div className="card-neo p-6 max-w-md w-full text-center text-ink/60 text-sm">loading…</div>}>
+      <Suspense fallback={<div className="card-neo p-6 max-w-md w-full text-center text-ink/60 text-sm">one sec…</div>}>
         <SignInContent />
       </Suspense>
     </div>
