@@ -4,6 +4,7 @@ import "./globals.css";
 import TopBar from "@/components/TopBar";
 import MobileBanner from "@/components/MobileBanner";
 import MotionConfigProvider from "@/components/MotionConfigProvider";
+import AuthInit from "@/components/AuthInit";
 
 const archivoBlack = Archivo_Black({
   variable: "--font-archivo-black",
@@ -39,6 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-body bg-paper text-ink">
         <MotionConfigProvider>
+          <AuthInit />
           <TopBar />
           <MobileBanner />
           <main className="flex-1 flex flex-col">{children}</main>
