@@ -1,46 +1,65 @@
-"use client";
+import Link from "next/link";
+import DemoStage from "@/components/landing/DemoStage";
+import { TOPICS } from "@/lib/trace/meta";
 
-import Editor from "@/components/Editor";
-import ExamplesDrawer from "@/components/ExamplesDrawer";
-import ProblemCard from "@/components/ProblemCard";
-import IntuitionCard from "@/components/IntuitionCard";
-import VisualizeButton from "@/components/VisualizeButton";
-import VisualizationStage from "@/components/VisualizationStage";
-import ControlDeck from "@/components/ControlDeck";
-import VariablesStrip from "@/components/VariablesStrip";
-import { useTraceStore } from "@/lib/store/traceStore";
-import { useKeyboardShortcuts } from "@/lib/store/useKeyboardShortcuts";
+const CARDS = [
+  {
+    title: "Real execution",
+    body: "Every step is real Python running in your browser via Pyodide — not an LLM imagining what your code might do.",
+  },
+  {
+    title: "18 topics",
+    body: "Arrays & Hashing through Advanced Graphs — every NeetCode-style pattern, two worked examples apiece.",
+  },
+  {
+    title: "Share anything",
+    body: "Paste your own code, or send a link that reproduces the exact trace, byte for byte, on someone else's machine.",
+  },
+] as const;
 
-export default function WorkspacePage() {
-  useKeyboardShortcuts();
-  const input = useTraceStore((s) => s.input);
-  const setInput = useTraceStore((s) => s.setInput);
-
+export default function LandingPage() {
   return (
-    <div className="flex-1 flex flex-col lg:flex-row gap-6 p-6 max-w-[1600px] w-full mx-auto">
-      {/* Left panel ~42%: editor + input + examples */}
-      <section className="lg:w-[42%] flex flex-col gap-4">
-        <Editor />
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="input (informational — edit code directly to change values)"
-          className="card-neo p-3 font-mono text-sm text-ink placeholder:text-ink/40 outline-none"
-        />
-        <VisualizeButton />
-        <ExamplesDrawer />
-        <ProblemCard />
-        <IntuitionCard />
+    <div className="flex-1 flex flex-col items-center">
+      <section className="w-full max-w-5xl mx-auto px-6 pt-14 sm:pt-20 pb-10 flex flex-col items-center text-center gap-6">
+        <h1 className="font-display text-5xl sm:text-7xl uppercase tracking-tight text-ink -rotate-2 inline-block shadow-neo border-neo bg-pop px-6 py-3">
+          TRACE
+        </h1>
+        <p className="font-body text-lg sm:text-2xl text-ink/80 max-w-xl">
+          Paste Python. Watch it run.
+        </p>
+        <Link href="/app" className="btn-neo-accent text-base sm:text-lg px-8 py-3">
+          Try it →
+        </Link>
       </section>
 
-      {/* Right panel ~58%: controls + visualization stage + variables */}
-      <section className="lg:w-[58%] flex flex-col gap-4">
-        <ControlDeck />
-        <div data-testid="viz-stage" className="card-neo flex flex-col max-h-[75vh] overflow-y-auto">
-          <VisualizationStage />
+      <section className="w-full max-w-5xl mx-auto px-6 pb-14 sm:pb-20">
+        <DemoStage />
+      </section>
+
+      <section className="w-full max-w-5xl mx-auto px-6 pb-14 sm:pb-20 grid sm:grid-cols-3 gap-4 sm:gap-6">
+        {CARDS.map(({ title, body }, i) => (
+          <div
+            key={title}
+            className={`card-neo p-5 flex flex-col gap-2 ${i === 1 ? "sm:-rotate-1" : i === 2 ? "sm:rotate-1" : ""}`}
+          >
+            <div className="font-display text-sm uppercase tracking-tight text-accent">{title}</div>
+            <p className="font-body text-sm text-ink/80">{body}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="w-full max-w-5xl mx-auto px-6 pb-16 sm:pb-24 flex flex-col items-center gap-4">
+        <div className="font-display text-xs uppercase tracking-wide text-ink/50">The full roadmap</div>
+        <div className="flex flex-wrap justify-center gap-2">
+          {TOPICS.map((topic) => (
+            <span
+              key={topic}
+              className="font-mono text-xs sm:text-sm border-neo shadow-neo-sm rounded-full px-3 py-1.5 bg-paper text-ink/80"
+            >
+              {topic}
+            </span>
+          ))}
         </div>
-        <VariablesStrip />
       </section>
     </div>
   );

@@ -13,7 +13,8 @@ interface ShareLinkLoaderProps {
 
 /** master.md §15: decode, load code+input (or the matching built-in
  * example's verified meta — no API call), auto-run, then hand off to the
- * workspace at "/". Malformed/oversized payloads get a designed error
+ * workspace at "/app" (Phase 7 moved the workspace off "/", which is now
+ * the landing page). Malformed/oversized payloads get a designed error
  * with an escape hatch instead of crashing. */
 export default function ShareLinkLoader({ encoded }: ShareLinkLoaderProps) {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function ShareLinkLoader({ encoded }: ShareLinkLoaderProps) {
       store.setInput(payload.input);
     }
 
-    router.replace("/");
+    router.replace("/app");
     void useTraceStore.getState().visualize();
     // payload is derived fresh from `encoded` each render; re-running this
     // effect should track that source, not a new object identity each time.
@@ -49,7 +50,7 @@ export default function ShareLinkLoader({ encoded }: ShareLinkLoaderProps) {
           <p className="font-body text-sm text-ink/70">
             This link couldn&apos;t be read — it may be malformed, too old, or too large.
           </p>
-          <Link href="/" className="btn-neo-accent text-xs py-1.5">
+          <Link href="/app" className="btn-neo-accent text-xs py-1.5">
             Start fresh
           </Link>
         </div>
