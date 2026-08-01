@@ -1,8 +1,15 @@
 # Overnight Handoff — Phase 8 (Auth-Ready) + Perfection Pass
 
-Branch: `overnight` (off `main` at commit `4265a95`). **Not merged to main, not deployed to production** — only preview deployments were made, per instructions. Review this file, then follow "Merge & deploy sequence" at the bottom when ready.
+Branch: `overnight` (off `main` at commit `4265a95`, 18 commits ahead). **Not merged to main, not deployed to production** — only preview deployments were made, per instructions. Review this file, then follow "Merge & deploy sequence" at the bottom when ready.
 
 Baseline before any changes tonight: `npx tsc --noEmit` clean, `npx eslint src` clean, `npm run build` clean, all 36 examples pass regression with zero console/page errors.
+
+## TL;DR
+
+- **Part A (Supabase auth + cloud tracker) — fully built, env-gated, zero behavior change with no keys set.** Untestable end-to-end tonight because no Supabase project exists yet — that's the only real blocker, and it's first on your list below.
+- **Part B (perfection pass) — done, all 8 areas.** Found and fixed 4 real bugs along the way: a CallTreeRenderer crash under rapid stepping, a step-counter visual glitch under rapid stepping, a missing alarm-color on removals (Stack/LinkedList/HashMap) per master.md's own spec, a genuine mobile horizontal-scroll bug, and — the big one — a 498KB Supabase SDK chunk that was accidentally loading on *every* route including the landing page, now fixed to load lazily.
+- **Final regression: 36/36 examples pass against the live preview deployment**, plus LLM path, share round-trip, keyboard shortcuts, and the landing demo loop all verified. (One real detour: a testing-infrastructure bug of my own making cost significant time to diagnose — see the Final section below — not an app bug.)
+- **Nothing merged to main, nothing deployed to production.** Everything is on `origin/overnight`, ready for your review.
 
 ---
 
@@ -22,7 +29,7 @@ _This section is updated live as work completes. Each entry: what shipped, how i
 - **Verified tonight:** typecheck/lint/build clean, all 36 examples pass, full tracker CRUD (add/edit/status-cycle/delete/undo/filters/export) smoke-tested against a fresh browser profile in local (unconfigured) mode — byte-identical behavior to before Part A, zero console errors. `.env.local` confirmed never committed to git history.
 - **Not verified tonight (needs your Supabase project):** the actual cloud read/write path, the import-prompt flow end-to-end, Google OAuth redirect, magic-link email delivery. All code-complete per the `@supabase/ssr` docs pattern, but there is no real Supabase project to point at until you create one. See "Manual steps for you" below.
 
-### Part B — Perfection Pass (in progress)
+### Part B — Perfection Pass — DONE (all 8 areas)
 
 **Animation tuning — done.** Rapid-fire stepping (simulating holding the step-forward key/button) across 16 examples spanning all 11 renderer types found and fixed two real bugs: a CallTreeRenderer crash on settled nodes (spring transition applied to a leftover multi-keyframe array) and a ControlDeck step-counter visual glitch (rapid changes concatenated text sideways instead of crossfading in place). Also audited every renderer's color usage against master.md §12's palette and added the missing alarm-tint on removal (Stack pop, LinkedList node-detach, HashMap key-delete) that master.md specifies but Phase 6 never implemented. Read=pop/write=accent/compare=shared-pop-pulse/discard=30%-opacity/visited=go were already correct from Phase 6.
 
@@ -124,4 +131,4 @@ vercel --prod
 
 If you'd rather review via a PR instead of merging directly: `gh pr create --base main --head overnight` — the branch is already pushed to `origin/overnight`.
 
-Before merging, worth a final skim of the diff for anything that looks off: `git diff main...overnight --stat` (16+ commits, touches auth/tracker/all 11 renderers/global CSS/metadata — summarized commit-by-commit in the Status section above; run `git log main..overnight --oneline` for the exact count and messages).
+Before merging, worth a final skim of the diff for anything that looks off: `git diff main...overnight --stat` (18 commits, 49 files, touches auth/tracker/all 11 renderers/global CSS/metadata — summarized commit-by-commit in the Status section above; run `git log main..overnight --oneline` for the exact list).
