@@ -33,5 +33,9 @@ result = findKthLargest(nums, k)
       result: "resultVar",
     },
     inputDescription: "A small unsorted array and k.",
+    problemName: "Kth Largest Element in an Array (LeetCode 215)",
+    problemSummary:
+      "Given an unsorted array and an integer k, find the kth largest element, using a bounded min-heap instead of sorting the whole array.",
+    constraints: ["1 <= k <= nums.length <= 10^4", "k is always valid for the given array", "duplicates are counted by position, not deduplicated"],
   },
 };

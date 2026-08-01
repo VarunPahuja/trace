@@ -44,5 +44,9 @@ result = bfs(graph, 0)
       result: "resultVar",
     },
     inputDescription: "A small undirected graph given as an adjacency list, and a start node.",
+    problemName: "Breadth-First Search Traversal",
+    problemSummary:
+      "Traverses a graph outward from a start node one ring of distance at a time, using a queue to guarantee nodes are visited in order of increasing distance from the start.",
+    constraints: ["graph given as an adjacency list", "works on connected or disconnected graphs", "each node is visited exactly once"],
   },
 };

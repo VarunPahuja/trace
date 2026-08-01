@@ -36,5 +36,9 @@ result = search(nums, target)
       result: "resultVar",
     },
     inputDescription: "A small sorted integer array and a target value.",
+    problemName: "Binary Search (LeetCode 704)",
+    problemSummary:
+      "Given a sorted array and a target value, find the index of the target using an efficient halving search, or return -1 if it's not present.",
+    constraints: ["array is sorted ascending with no duplicates", "1 <= nums.length <= 10^4", "must run faster than a linear scan"],
   },
 };

@@ -38,7 +38,7 @@ export default function BitsRenderer({ varNames }: BitsRendererProps) {
         const prevBits = typeof prevValue === "number" ? toBits(prevValue) : null;
         return (
           <div key={name} className="flex flex-col gap-1">
-            <div className="font-mono text-xs text-ink/50">
+            <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">
               {name} = {value}
             </div>
             <div className="flex gap-0.5" style={{ perspective: 300 }}>
@@ -49,7 +49,7 @@ export default function BitsRenderer({ varNames }: BitsRendererProps) {
                     key={i}
                     animate={changed ? { rotateX: [0, 180, 0], backgroundColor: ["#4F46E5", "#FDF6E3"] } : {}}
                     transition={{ duration: 0.3 }}
-                    className="w-6 h-8 flex items-center justify-center border-2 border-ink rounded font-mono text-xs text-ink"
+                    className="w-6 h-8 flex items-center justify-center border-2 border-ink shadow-neo-sm rounded font-mono text-xs text-ink"
                   >
                     {bit}
                   </motion.div>

@@ -35,5 +35,9 @@ result = maxArea(height)
       result: "resultVar",
     },
     inputDescription: "A small list of wall heights.",
+    problemName: "Container With Most Water (LeetCode 11)",
+    problemSummary:
+      "Given a list of vertical line heights, pick two lines that, together with the x-axis, form a container holding the most water.",
+    constraints: ["2 <= height.length <= 10^5", "each height is non-negative", "container is bounded by the shorter of the two chosen lines"],
   },
 };

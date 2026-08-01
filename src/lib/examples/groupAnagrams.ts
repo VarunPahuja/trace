@@ -32,5 +32,9 @@ result = groupAnagrams(strs)
       result: "resultVar",
     },
     inputDescription: "A small list of lowercase words.",
+    problemName: "Group Anagrams (LeetCode 49)",
+    problemSummary:
+      "Given a list of strings, cluster together every string that's an anagram of another — same letters, any order — into its own group.",
+    constraints: ["1 <= strs.length <= 10^4", "strings contain only lowercase letters", "output groups can be in any order"],
   },
 };

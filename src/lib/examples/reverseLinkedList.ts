@@ -49,5 +49,9 @@ result = reverseList(head)
       values: "other",
     },
     inputDescription: "A short linked list built from a small array of values.",
+    problemName: "Reverse Linked List (LeetCode 206)",
+    problemSummary:
+      "Given the head of a singly linked list, reverse the list in place and return the new head.",
+    constraints: ["0 <= number of nodes <= 5000", "reversal is done in place", "node values can be any integer"],
   },
 };

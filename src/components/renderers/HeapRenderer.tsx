@@ -97,7 +97,7 @@ export default function HeapRenderer({ varName }: HeapRendererProps) {
                 backgroundColor: changed ? ["#4F46E5", "#FDF6E3"] : "#FDF6E3",
               }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="absolute flex items-center justify-center border-2 border-ink rounded-full font-mono text-xs text-ink"
+              className="absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-full font-mono text-xs text-ink"
               style={{ width: NODE_R * 2, height: NODE_R * 2 }}
             >
               {formatValue(val)}

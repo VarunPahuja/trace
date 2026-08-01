@@ -37,5 +37,9 @@ result = lengthOfLongestSubstring(s)
       result: "resultVar",
     },
     inputDescription: "A short string to scan for its longest repeat-free run.",
+    problemName: "Longest Substring Without Repeating Characters (LeetCode 3)",
+    problemSummary:
+      "Given a string, find the length of the longest contiguous run of characters that contains no repeats.",
+    constraints: ["0 <= s.length <= 5*10^4", "string may contain letters, digits, symbols, and spaces", "substring must be contiguous"],
   },
 };

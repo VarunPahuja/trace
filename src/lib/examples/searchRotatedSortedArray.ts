@@ -42,5 +42,9 @@ result = search(nums, target)
       result: "resultVar",
     },
     inputDescription: "A small rotated sorted array and a target value.",
+    problemName: "Search in Rotated Sorted Array (LeetCode 33)",
+    problemSummary:
+      "Given an array that was sorted and then rotated at some unknown pivot, find the index of a target value in better than linear time.",
+    constraints: ["1 <= nums.length <= 5000", "all values are distinct", "array was originally sorted before the rotation"],
   },
 };

@@ -79,35 +79,35 @@ export default function VisualizationStage() {
 
   if (status === "idle" && steps.length === 0) {
     return (
-      <div className="flex-1 min-h-[420px] flex items-center justify-center font-body text-ink/50">
+      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/50">
         paste code and press Visualize
       </div>
     );
   }
   if (status === "preprocessing") {
     return (
-      <div className="flex-1 min-h-[420px] flex items-center justify-center font-body text-ink/60">
+      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/60">
         reading your code…
       </div>
     );
   }
   if (status === "warming") {
     return (
-      <div className="flex-1 min-h-[420px] flex items-center justify-center font-body text-ink/60">
+      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/60">
         warming up the python engine…
       </div>
     );
   }
   if (status === "running") {
     return (
-      <div className="flex-1 min-h-[420px] flex items-center justify-center font-body text-ink/60">
+      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/60">
         tracing…
       </div>
     );
   }
   if (status === "error") {
     return (
-      <div className="flex-1 min-h-[420px] flex items-center justify-center p-6">
+      <div className="min-h-[320px] flex items-center justify-center p-6">
         <div className="border-4 border-alarm shadow-neo rounded-[14px] bg-alarm/10 p-4 max-w-md text-center flex flex-col items-center gap-3">
           <div className="font-display uppercase text-alarm">Couldn&apos;t run that</div>
           <div className="font-mono text-sm text-ink/80 whitespace-pre-wrap">{errorMessage}</div>
@@ -121,14 +121,14 @@ export default function VisualizationStage() {
 
   if (scene.primary.length === 0 && scene.secondary.length === 0) {
     return (
-      <div className="flex-1 min-h-[420px] flex items-center justify-center font-body text-ink/50 p-6 text-center">
+      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/50 p-6 text-center">
         no renderer matched this trace yet — check the variables strip below
       </div>
     );
   }
 
   return (
-    <div className="flex-1 min-h-[420px] flex flex-col gap-6 p-6 overflow-auto">
+    <div className="flex flex-col gap-6 p-6">
       {truncated && (
         <div className="border-neo shadow-neo-sm rounded-lg bg-pop/20 px-3 py-2 text-xs font-mono">
           trace truncated — try a smaller input

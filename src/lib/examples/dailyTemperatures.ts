@@ -33,5 +33,9 @@ result = dailyTemperatures(temperatures)
       prevIndex: "other",
     },
     inputDescription: "A small list of daily temperatures.",
+    problemName: "Daily Temperatures (LeetCode 739)",
+    problemSummary:
+      "Given a list of daily temperatures, find for each day how many days you'd have to wait until a warmer temperature, using 0 if no future day is warmer.",
+    constraints: ["1 <= temperatures.length <= 10^5", "temperature values are bounded integers", "output length matches input length"],
   },
 };

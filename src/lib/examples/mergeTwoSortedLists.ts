@@ -52,5 +52,9 @@ result = mergeTwoLists(l1, l2)
       values: "other",
     },
     inputDescription: "Two short sorted linked lists.",
+    problemName: "Merge Two Sorted Lists (LeetCode 21)",
+    problemSummary:
+      "Given the heads of two sorted linked lists, splice them together into one sorted list by reusing the existing nodes.",
+    constraints: ["0 <= nodes in each list <= 50", "both lists are sorted in non-decreasing order", "result reuses the original nodes"],
   },
 };

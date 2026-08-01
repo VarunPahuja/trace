@@ -56,6 +56,9 @@ export interface PreprocessMeta {
   subPattern: string;
   roles: Record<string, VariableRole>;
   inputDescription: string;
+  problemName: string;
+  problemSummary: string;
+  constraints: string[];
 }
 
 export type Difficulty = "Easy" | "Medium" | "Hard";

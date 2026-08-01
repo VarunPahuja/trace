@@ -48,5 +48,9 @@ result = startsWith(root, "ap")
       result: "resultVar",
     },
     inputDescription: "A small set of words inserted into a trie, then a prefix check.",
+    problemName: "Implement Trie (Prefix Tree) — startsWith (LeetCode 208)",
+    problemSummary:
+      "Extends a trie with a prefix check that returns true if any inserted word begins with the given prefix, regardless of whether the prefix itself is a complete word.",
+    constraints: ["words and prefixes contain lowercase English letters", "startsWith runs proportional to prefix length", "prefix need not be a complete inserted word"],
   },
 };

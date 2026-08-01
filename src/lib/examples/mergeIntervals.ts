@@ -34,5 +34,9 @@ result = merge(intervals)
       result: "resultVar",
     },
     inputDescription: "A small list of [start, end] intervals.",
+    problemName: "Merge Intervals (LeetCode 56)",
+    problemSummary:
+      "Given a list of intervals that may overlap, merge all overlapping intervals and return the resulting set of non-overlapping intervals.",
+    constraints: ["1 <= intervals.length <= 10^4", "each interval is [start, end] with start <= end", "output must be sorted and non-overlapping"],
   },
 };

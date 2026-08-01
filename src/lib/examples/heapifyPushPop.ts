@@ -25,5 +25,9 @@ result = heap
       result: "resultVar",
     },
     inputDescription: "A small unordered array turned into a heap.",
+    problemName: "Binary Heap — Heapify, Push, Pop",
+    problemSummary:
+      "Demonstrates the three core min-heap operations on an array-backed heap: turning an unordered array into heap order, pushing a new element, and popping the smallest element.",
+    constraints: ["heap operates on a plain array via index math", "heapify runs in linear time", "push/pop run in logarithmic time"],
   },
 };

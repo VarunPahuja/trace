@@ -37,7 +37,7 @@ export default function GridRenderer({ varName, rowVar, colVar }: GridRendererPr
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="font-mono text-xs text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
       <div className="inline-flex flex-col gap-1">
         {grid.map((row, r) => (
           <div key={r} className="flex gap-1">
@@ -50,7 +50,7 @@ export default function GridRenderer({ varName, rowVar, colVar }: GridRendererPr
                   key={c}
                   animate={{ backgroundColor: changed ? ["#4F46E5", "#FDF6E3"] : "#FDF6E3" }}
                   transition={{ duration: 0.24 }}
-                  className={`flex items-center justify-center border-2 rounded-md font-mono text-xs text-ink ${
+                  className={`flex items-center justify-center border-2 rounded-md shadow-neo-sm font-mono text-xs text-ink ${
                     isCurrent ? "border-pop ring-2 ring-pop" : "border-ink"
                   }`}
                   style={{ width: CELL, height: CELL }}

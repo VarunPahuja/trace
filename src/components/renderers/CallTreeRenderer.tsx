@@ -83,7 +83,7 @@ export default function CallTreeRenderer() {
               initial={{ ...cx, scale: 0.5, opacity: 0 }}
               animate={{ ...cx, scale: 1, opacity: isFaded ? 0.3 : 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className={`absolute flex items-center justify-center border-2 border-ink rounded-md font-mono text-[10px] whitespace-nowrap px-1 ${
+              className={`absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-md font-mono text-[10px] whitespace-nowrap px-1 ${
                 justReturned ? "bg-go text-paper" : isActive ? "bg-accent text-paper" : "bg-paper text-ink"
               }`}
               style={{ width: NODE_W, height: NODE_H }}

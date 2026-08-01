@@ -49,5 +49,9 @@ result = topologicalSort(graph, 5)
       result: "resultVar",
     },
     inputDescription: "A small directed acyclic graph.",
+    problemName: "Topological Sort (Kahn's Algorithm)",
+    problemSummary:
+      "Given a directed acyclic graph, produces a linear ordering of its nodes such that every directed edge points from an earlier node to a later one — commonly used to schedule tasks with prerequisites.",
+    constraints: ["graph must be acyclic for a valid ordering to exist", "graph given as an adjacency list", "multiple valid orderings may exist"],
   },
 };

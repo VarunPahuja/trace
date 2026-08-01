@@ -26,5 +26,9 @@ result = singleNumber(nums)
       num: "bitValue",
     },
     inputDescription: "A small array where every number appears twice except one.",
+    problemName: "Single Number (LeetCode 136)",
+    problemSummary:
+      "Given a list where every number appears exactly twice except for one, find the number that appears only once, using linear time and constant extra space.",
+    constraints: ["1 <= nums.length <= 3*10^4", "every element appears exactly twice except one", "must use O(1) extra space"],
   },
 };

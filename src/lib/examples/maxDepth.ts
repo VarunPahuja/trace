@@ -45,5 +45,9 @@ result = maxDepth(root)
       rightSpec: "other",
     },
     inputDescription: "A small fixed binary tree.",
+    problemName: "Maximum Depth of Binary Tree (LeetCode 104)",
+    problemSummary:
+      "Given the root of a binary tree, find the number of nodes along the longest path from the root down to the farthest leaf.",
+    constraints: ["0 <= number of nodes <= 10^4", "an empty tree has depth 0", "depth counts nodes, not edges"],
   },
 };

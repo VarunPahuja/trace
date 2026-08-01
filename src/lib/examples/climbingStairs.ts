@@ -31,5 +31,9 @@ result = climbStairs(n)
       result: "resultVar",
     },
     inputDescription: "A small number of stairs.",
+    problemName: "Climbing Stairs (LeetCode 70)",
+    problemSummary:
+      "Given a staircase of n steps where you can climb 1 or 2 steps at a time, count how many distinct ways there are to reach the top.",
+    constraints: ["1 <= n <= 45", "each move is either 1 or 2 steps", "order of moves matters"],
   },
 };

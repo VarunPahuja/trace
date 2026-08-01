@@ -28,5 +28,9 @@ result = canJumpGame(nums)
       result: "resultVar",
     },
     inputDescription: "A small array of max-jump-lengths per position.",
+    problemName: "Jump Game (LeetCode 55)",
+    problemSummary:
+      "Given an array where each element is the maximum jump length from that position, determine whether it's possible to reach the last index starting from the first.",
+    constraints: ["1 <= nums.length <= 10^4", "each value is the max jump distance from that index", "only forward jumps are allowed"],
   },
 };

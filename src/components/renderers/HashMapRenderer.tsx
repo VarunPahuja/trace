@@ -33,7 +33,7 @@ export default function HashMapRenderer({ varName }: HashMapRendererProps) {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="font-mono text-xs text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
       <div className="flex flex-wrap gap-1">
         <AnimatePresence>
           {dict.entries.map(([k, v]) => {
@@ -48,7 +48,7 @@ export default function HashMapRenderer({ varName }: HashMapRendererProps) {
                 animate={{ y: 0, opacity: 1, scale: isChanged ? [1, 1.15, 1] : 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                className="font-mono text-xs px-2 py-1 rounded-full border-2 border-ink bg-paper"
+                className="font-mono text-xs px-2 py-1 rounded-full border-2 border-ink shadow-neo-sm bg-paper"
               >
                 {keyStr}: {valStr}
               </motion.div>

@@ -38,7 +38,7 @@ export default function IntervalRenderer({ varName }: IntervalRendererProps) {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="font-mono text-xs text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
       <div
         className="relative"
         style={{ width: xOf(maxVal) + 40, height: intervals.length * (BAR_HEIGHT + ROW_GAP) }}
@@ -61,7 +61,7 @@ export default function IntervalRenderer({ varName }: IntervalRendererProps) {
                 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                className="absolute flex items-center justify-center border-2 border-ink rounded-full bg-accent/20 font-mono text-xs whitespace-nowrap px-1"
+                className="absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-full bg-accent/20 font-mono text-xs whitespace-nowrap px-1"
                 style={{ height: BAR_HEIGHT }}
               >
                 [{start}, {end}]

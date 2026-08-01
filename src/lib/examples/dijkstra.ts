@@ -53,5 +53,9 @@ result = dijkstra(graph, 0)
       result: "resultVar",
     },
     inputDescription: "A small weighted directed graph and a start node.",
+    problemName: "Dijkstra's Shortest Path Algorithm",
+    problemSummary:
+      "Finds the shortest distance from a start node to every other node in a weighted graph by always expanding the currently-cheapest reachable node next.",
+    constraints: ["edge weights are non-negative", "graph given as a weighted adjacency list", "unreachable nodes keep a distance of infinity"],
   },
 };

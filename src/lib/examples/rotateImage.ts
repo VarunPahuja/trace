@@ -43,5 +43,9 @@ result = matrix
       result: "other",
     },
     inputDescription: "A small square matrix to rotate 90° clockwise, in place.",
+    problemName: "Rotate Image (LeetCode 48)",
+    problemSummary:
+      "Given an n x n matrix representing an image, rotate it 90 degrees clockwise in place, without allocating another matrix.",
+    constraints: ["n == matrix.length == matrix[i].length", "1 <= n <= 20", "rotation must be done in place"],
   },
 };

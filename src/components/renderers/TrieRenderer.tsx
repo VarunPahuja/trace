@@ -100,7 +100,7 @@ export default function TrieRenderer({ rootVars, pointerVars }: TrieRendererProp
               initial={{ ...pos, scale: 0.5, opacity: 0 }}
               animate={{ ...pos, scale: 1, opacity: 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className={`absolute flex items-center justify-center rounded-full font-mono text-[10px] ${
+              className={`absolute flex items-center justify-center rounded-full shadow-neo-sm font-mono text-[10px] ${
                 isCurrent ? "border-2 border-accent bg-accent text-paper" : "border-2 border-ink bg-paper text-ink"
               } ${p.isWord ? "ring-2 ring-go ring-offset-1" : ""}`}
               style={{ width: NODE_R * 2, height: NODE_R * 2 }}

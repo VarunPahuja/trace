@@ -8,6 +8,9 @@ export const PreprocessResponseSchema = z.object({
   subPattern: z.string(),
   roles: z.record(z.string(), z.enum(VARIABLE_ROLES)),
   inputDescription: z.string(),
+  problemName: z.string().min(1),
+  problemSummary: z.string().min(1),
+  constraints: z.array(z.string()),
 });
 
 export type PreprocessResponse = z.infer<typeof PreprocessResponseSchema>;

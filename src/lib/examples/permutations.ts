@@ -37,5 +37,9 @@ result = permute(nums)
       i: "pointer",
     },
     inputDescription: "A small array to generate all permutations of.",
+    problemName: "Permutations (LeetCode 46)",
+    problemSummary:
+      "Given an array of distinct integers, return every possible ordering (permutation) of those numbers.",
+    constraints: ["1 <= nums.length <= 6", "all elements are distinct", "output may be in any order"],
   },
 };

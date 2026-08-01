@@ -107,7 +107,7 @@ export default function LinkedListRenderer({ headVars, pointerVars }: LinkedList
               key={id}
               animate={{ left: i * stride, top: isReachable ? ROW_TOP : ROW_TOP + 10, opacity: isReachable ? 1 : 0.3 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="absolute flex items-center justify-center border-2 border-ink rounded-md bg-paper font-mono text-sm"
+              className="absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-md bg-paper font-mono text-sm"
               style={{ width: NODE_W, height: NODE_H }}
             >
               {formatValue(lastKnownValueById.get(id) ?? null)}

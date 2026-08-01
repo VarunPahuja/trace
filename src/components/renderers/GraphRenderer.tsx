@@ -99,14 +99,14 @@ export default function GraphRenderer({ graphVar, visitedVar, pointerVars, dista
               backgroundColor: isCurrent ? "#4F46E5" : isVisited ? "#10B981" : "#FDF6E3",
             }}
             transition={{ type: "spring", stiffness: 300, damping: 24 }}
-            className={`absolute flex items-center justify-center border-2 border-ink rounded-full font-mono text-sm ${
+            className={`absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-full font-mono text-sm ${
               isCurrent || isVisited ? "text-paper" : "text-ink"
             }`}
             style={{ width: NODE_R * 2, height: NODE_R * 2 }}
           >
             {key}
             {dist !== undefined && (
-              <div className="absolute -top-2 -right-2 bg-pop text-ink text-[9px] font-mono px-1 rounded-full border border-ink whitespace-nowrap">
+              <div className="absolute -top-2 -right-2 bg-pop text-ink text-[9px] font-mono px-1 rounded-full border-2 border-ink shadow-neo-sm whitespace-nowrap">
                 {formatValue(dist)}
               </div>
             )}

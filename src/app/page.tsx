@@ -2,6 +2,7 @@
 
 import Editor from "@/components/Editor";
 import ExamplesDrawer from "@/components/ExamplesDrawer";
+import ProblemCard from "@/components/ProblemCard";
 import IntuitionCard from "@/components/IntuitionCard";
 import VisualizeButton from "@/components/VisualizeButton";
 import VisualizationStage from "@/components/VisualizationStage";
@@ -29,15 +30,16 @@ export default function WorkspacePage() {
         />
         <VisualizeButton />
         <ExamplesDrawer />
+        <ProblemCard />
         <IntuitionCard />
       </section>
 
-      {/* Right panel ~58%: visualization stage + controls + variables */}
+      {/* Right panel ~58%: controls + visualization stage + variables */}
       <section className="lg:w-[58%] flex flex-col gap-4">
-        <div className="card-neo flex-1 min-h-[420px] flex flex-col">
+        <ControlDeck />
+        <div className="card-neo flex flex-col max-h-[75vh] overflow-y-auto">
           <VisualizationStage />
         </div>
-        <ControlDeck />
         <VariablesStrip />
       </section>
     </div>

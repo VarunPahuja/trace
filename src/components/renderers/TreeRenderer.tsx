@@ -83,7 +83,7 @@ export default function TreeRenderer({ rootVars, pointerVars }: TreeRendererProp
               initial={{ ...pos, scale: 0.5, opacity: 0 }}
               animate={{ ...pos, scale: 1, opacity: 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className={`absolute flex items-center justify-center border-2 rounded-full font-mono text-sm ${
+              className={`absolute flex items-center justify-center border-2 shadow-neo-sm rounded-full font-mono text-sm ${
                 isCurrent ? "border-accent bg-accent text-paper" : "border-ink bg-paper"
               }`}
               style={{ width: NODE_R * 2, height: NODE_R * 2 }}

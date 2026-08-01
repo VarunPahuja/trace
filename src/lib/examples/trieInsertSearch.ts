@@ -47,5 +47,9 @@ result = search(root, "car")
       result: "resultVar",
     },
     inputDescription: "A small set of words inserted into a trie, then searched.",
+    problemName: "Implement Trie (Prefix Tree) (LeetCode 208)",
+    problemSummary:
+      "Implements a trie supporting insertion of words and exact-word search, where each node represents one character and branches fork per next letter.",
+    constraints: ["words contain lowercase English letters", "insert and search run proportional to word length", "search must distinguish a full word from just a prefix"],
   },
 };

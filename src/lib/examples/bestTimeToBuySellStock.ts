@@ -35,5 +35,9 @@ result = maxProfit(prices)
       result: "resultVar",
     },
     inputDescription: "A small list of daily stock prices.",
+    problemName: "Best Time to Buy and Sell Stock (LeetCode 121)",
+    problemSummary:
+      "Given a list of daily stock prices, find the maximum profit from buying on one day and selling on a later day, returning 0 if no profit is possible.",
+    constraints: ["1 <= prices.length <= 10^5", "must buy before you sell", "at most one buy and one sell allowed"],
   },
 };

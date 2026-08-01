@@ -34,5 +34,9 @@ result = twoSum(nums, target)
       result: "resultVar",
     },
     inputDescription: "A small integer array and a target sum.",
+    problemName: "Two Sum (LeetCode 1)",
+    problemSummary:
+      "Given an array of integers and a target sum, find the indices of the two numbers that add up to the target. Each input has exactly one valid pair.",
+    constraints: ["2 <= nums.length <= 10^4", "exactly one valid answer exists", "can't reuse the same element twice"],
   },
 };

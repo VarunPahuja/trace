@@ -54,7 +54,7 @@ export default function ArrayRenderer({ varName, overlay, dimRangeStartVar, dimR
 
   return (
     <div className="flex flex-col gap-1 pb-5">
-      <div className="font-mono text-xs text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
       <div className="relative flex gap-1">
         {overlay}
         {array.map((cell, i) => {
@@ -72,7 +72,7 @@ export default function ArrayRenderer({ varName, overlay, dimRangeStartVar, dimR
                   opacity: isDimmed ? 0.3 : 1,
                 }}
                 transition={{ duration: 0.24 }}
-                className={`w-10 h-10 flex items-center justify-center border-2 rounded-md font-mono text-sm relative ${
+                className={`w-10 h-10 flex items-center justify-center border-2 rounded-md shadow-neo-sm font-mono text-sm relative ${
                   isRead ? "border-pop ring-2 ring-pop" : "border-ink"
                 }`}
               >

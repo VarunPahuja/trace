@@ -30,5 +30,9 @@ result = uniquePaths(m, n)
       result: "resultVar",
     },
     inputDescription: "A small grid's width and height.",
+    problemName: "Unique Paths (LeetCode 62)",
+    problemSummary:
+      "Given the dimensions of a grid, count how many distinct paths there are from the top-left corner to the bottom-right corner, moving only right or down.",
+    constraints: ["1 <= m, n <= 100", "movement is restricted to right or down", "answer fits in a 32-bit integer"],
   },
 };

@@ -40,5 +40,9 @@ result = insert(intervals, newInterval)
       n: "other",
     },
     inputDescription: "A sorted list of non-overlapping intervals and one new interval to insert.",
+    problemName: "Insert Interval (LeetCode 57)",
+    problemSummary:
+      "Given a sorted, non-overlapping list of intervals and a new interval, insert it into the list, merging any overlaps along the way.",
+    constraints: ["intervals are sorted and non-overlapping before insertion", "0 <= intervals.length <= 10^4", "new interval may overlap zero, one, or many existing intervals"],
   },
 };

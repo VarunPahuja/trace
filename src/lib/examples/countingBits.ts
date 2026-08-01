@@ -27,5 +27,9 @@ result = countBits(n)
       result: "resultVar",
     },
     inputDescription: "An upper bound n; counts set bits for every number from 0 to n.",
+    problemName: "Counting Bits (LeetCode 338)",
+    problemSummary:
+      "Given a non-negative integer n, return an array where each index i holds the number of 1 bits in the binary representation of i, for every i from 0 to n.",
+    constraints: ["0 <= n <= 10^5", "output length is n+1", "should run in linear time"],
   },
 };

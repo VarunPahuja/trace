@@ -37,5 +37,9 @@ result = longestCommonSubsequence(text1, text2)
       result: "resultVar",
     },
     inputDescription: "Two short strings to compare.",
+    problemName: "Longest Common Subsequence (LeetCode 1143)",
+    problemSummary:
+      "Given two strings, find the length of their longest subsequence common to both — characters appearing in the same relative order in both, not necessarily contiguous.",
+    constraints: ["1 <= text1.length, text2.length <= 1000", "strings contain lowercase English letters", "subsequence doesn't need to be contiguous"],
   },
 };

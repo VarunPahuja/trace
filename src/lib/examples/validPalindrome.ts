@@ -33,5 +33,9 @@ result = isPalindrome(s)
       result: "resultVar",
     },
     inputDescription: "A short sentence to check as a palindrome, ignoring case and punctuation.",
+    problemName: "Valid Palindrome (LeetCode 125)",
+    problemSummary:
+      "Given a string, determine whether it reads the same forwards and backwards once non-alphanumeric characters are removed and case is ignored.",
+    constraints: ["string may contain letters, digits, spaces, and punctuation", "comparison is case-insensitive", "empty string counts as a palindrome"],
   },
 };

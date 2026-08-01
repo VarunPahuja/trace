@@ -31,5 +31,9 @@ result = rob(nums)
       result: "resultVar",
     },
     inputDescription: "A small list of house values to rob.",
+    problemName: "House Robber (LeetCode 198)",
+    problemSummary:
+      "Given the amount of money stashed in a row of houses, find the maximum you can rob without ever robbing two adjacent houses.",
+    constraints: ["1 <= nums.length <= 100", "house values are non-negative", "can't rob two directly adjacent houses"],
   },
 };

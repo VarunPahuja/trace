@@ -34,5 +34,9 @@ result = isValid(s)
       result: "resultVar",
     },
     inputDescription: "A short string of brackets to validate.",
+    problemName: "Valid Parentheses (LeetCode 20)",
+    problemSummary:
+      "Given a string of just the characters (){}[], determine whether every bracket is closed in the correct order by the matching bracket type.",
+    constraints: ["1 <= s.length <= 10^4", "string contains only bracket characters", "open brackets must close in the right order"],
   },
 };

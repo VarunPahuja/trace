@@ -24,7 +24,7 @@ export default function StackRenderer({ varName }: StackRendererProps) {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="font-mono text-xs text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
       <div className="flex flex-col-reverse gap-1 items-start min-h-[2.5rem]">
         <AnimatePresence initial={false}>
           {stack.map((item, i) => (
@@ -35,7 +35,7 @@ export default function StackRenderer({ varName }: StackRendererProps) {
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8, y: -8 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="font-mono text-sm px-3 py-1 border-2 border-ink rounded-md bg-paper min-w-[3rem] text-center"
+              className="font-mono text-sm px-3 py-1 border-2 border-ink shadow-neo-sm rounded-md bg-paper min-w-[3rem] text-center"
             >
               {formatValue(item)}
             </motion.div>

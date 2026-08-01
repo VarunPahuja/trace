@@ -48,5 +48,9 @@ inorder(root, result)
       result: "resultVar",
     },
     inputDescription: "A small sequence of integers inserted one at a time to build a BST.",
+    problemName: "BST Insert + Inorder Traversal",
+    problemSummary:
+      "Builds a binary search tree by inserting values one at a time, then walks it with an inorder traversal to show that visiting left-root-right always yields values in sorted order.",
+    constraints: ["values inserted one at a time", "tree stays a valid BST after every insert", "inorder traversal visits left, node, right"],
   },
 };

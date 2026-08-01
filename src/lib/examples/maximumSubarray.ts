@@ -30,5 +30,9 @@ result = maxSubArray(nums)
       result: "resultVar",
     },
     inputDescription: "A small array of positive and negative integers.",
+    problemName: "Maximum Subarray (LeetCode 53)",
+    problemSummary:
+      "Given an array of integers, find the contiguous subarray with the largest sum and return that sum.",
+    constraints: ["1 <= nums.length <= 10^5", "array may contain negative numbers", "subarray must be contiguous and non-empty"],
   },
 };

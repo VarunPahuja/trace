@@ -53,5 +53,9 @@ result = numIslands(grid)
       result: "resultVar",
     },
     inputDescription: "A small grid of 1s (land) and 0s (water).",
+    problemName: "Number of Islands (LeetCode 200)",
+    problemSummary:
+      "Given a grid of 1s (land) and 0s (water), count the number of islands, where an island is a group of horizontally or vertically connected land cells.",
+    constraints: ["1 <= rows, cols <= 300", "grid contains only 0s and 1s", "connectivity is 4-directional, not diagonal"],
   },
 };

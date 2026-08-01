@@ -92,7 +92,11 @@ export const useTraceStore = create<TraceState>((set, get) => ({
     // deck/stage keep showing stale step data (e.g. "1/17" from the last
     // run) while a new preprocess/trace is in flight, which reads as a
     // finished result even though status is still preprocessing/warming.
-    set({ steps: [], diffs: [], currentStep: 0, truncated: false });
+    // Same reasoning applies to `meta` for arbitrary code: without clearing
+    // it, the Problem card keeps showing the previous run's problem while
+    // the LLM pass is still in flight. Built-in examples already have the
+    // right meta set by loadExample, so leave it alone in that case.
+    set({ steps: [], diffs: [], currentStep: 0, truncated: false, meta: activeExample ? get().meta : null });
 
     // Built-in examples ship hand-authored meta and never need the LLM
     // pass (§5); anything else (pasted/edited code) goes through
@@ -111,7 +115,15 @@ export const useTraceStore = create<TraceState>((set, get) => ({
           return;
         }
         codeToRun = data.normalizedCode;
-        meta = { topic: data.topic, subPattern: data.subPattern, roles: data.roles, inputDescription: data.inputDescription };
+        meta = {
+          topic: data.topic,
+          subPattern: data.subPattern,
+          roles: data.roles,
+          inputDescription: data.inputDescription,
+          problemName: data.problemName,
+          problemSummary: data.problemSummary,
+          constraints: data.constraints,
+        };
         // Swap the editor to the normalized source so line-highlighting
         // during playback points at the code that actually ran.
         set({ code: codeToRun });

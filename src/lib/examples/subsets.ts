@@ -35,5 +35,9 @@ result = subsets(nums)
       i: "pointer",
     },
     inputDescription: "A small array to generate all subsets of.",
+    problemName: "Subsets (LeetCode 78)",
+    problemSummary:
+      "Given an array of distinct integers, return every possible subset (the power set), including the empty set and the full array.",
+    constraints: ["1 <= nums.length <= 10", "all elements are distinct", "output may be in any order"],
   },
 };

@@ -35,5 +35,9 @@ result = myPow(x, n)
       result: "resultVar",
     },
     inputDescription: "A base and an exponent.",
+    problemName: "Pow(x, n) (LeetCode 50)",
+    problemSummary:
+      "Implements a function that raises a floating point number x to an integer power n, faster than n repeated multiplications.",
+    constraints: ["n can be negative, zero, or positive", "x is a floating point base", "should run in O(log n) time"],
   },
 };
