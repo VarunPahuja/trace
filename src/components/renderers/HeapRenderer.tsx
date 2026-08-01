@@ -5,6 +5,8 @@ import { useTraceStore } from "@/lib/store/traceStore";
 import { formatValue } from "@/lib/trace/format";
 import ArrayRenderer from "./ArrayRenderer";
 import type { SerializedValue } from "@/lib/trace/types";
+import { moveTransition, useMotionMode, writeTransition } from "@/lib/motion/timing";
+import { detectSwap } from "@/lib/renderers/swapDetect";
 
 interface HeapRendererProps {
   varName: string;
@@ -19,7 +21,11 @@ const BOTTOM_SPACING = 40;
  * the same `varName` array each render, so a swap animates in both at
  * once without any extra plumbing. Python's heapq operates on a plain
  * list, so parent/child is pure index arithmetic (2i+1, 2i+2) — no new
- * harness serialization needed, and no force simulation either. */
+ * harness serialization needed, and no force simulation either. Phase 6:
+ * sift-up/down swaps arc between the two tree positions using the same
+ * swap-detection heuristic and ghost-overlay technique as ArrayRenderer,
+ * so the tree view and the array view underneath both read the same swap
+ * the same way. */
 function computeHeapPositions(n: number): Map<number, { x: number; y: number }> {
   const positions = new Map<number, { x: number; y: number }>();
   if (n === 0) return positions;
@@ -40,6 +46,7 @@ function computeHeapPositions(n: number): Map<number, { x: number; y: number }> 
 export default function HeapRenderer({ varName }: HeapRendererProps) {
   const steps = useTraceStore((s) => s.steps);
   const currentStep = useTraceStore((s) => s.currentStep);
+  const { mode, speed } = useMotionMode();
   const step = steps[currentStep];
   const prevStep = currentStep > 0 ? steps[currentStep - 1] : null;
   if (!step) return null;
@@ -54,6 +61,7 @@ export default function HeapRenderer({ varName }: HeapRendererProps) {
 
   const prevValue = prevStep?.locals[varName];
   const prevHeap = Array.isArray(prevValue) ? (prevValue as SerializedValue[]) : null;
+  const swap = detectSwap(prevHeap, heap);
 
   const positions = computeHeapPositions(heap.length);
   const maxX = Math.max(...[...positions.values()].map((p) => p.x));
@@ -77,7 +85,7 @@ export default function HeapRenderer({ varName }: HeapRendererProps) {
                 key={i}
                 initial={coords}
                 animate={coords}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                transition={moveTransition(mode, speed)}
                 stroke="#111111"
                 strokeWidth={2}
               />
@@ -87,16 +95,23 @@ export default function HeapRenderer({ varName }: HeapRendererProps) {
         {heap.map((val, i) => {
           const pos = positions.get(i);
           if (!pos) return null;
-          const changed = prevHeap ? JSON.stringify(prevHeap[i]) !== JSON.stringify(val) : false;
+          const isSwapCell = swap !== null && (i === swap.i || i === swap.j);
+          const changed = !isSwapCell && (prevHeap ? JSON.stringify(prevHeap[i]) !== JSON.stringify(val) : false);
           return (
             <motion.div
               key={i}
               animate={{
                 left: pos.x,
                 top: pos.y,
+                scale: changed ? [1, 1.12, 1] : 1,
+                opacity: isSwapCell ? 0 : 1,
                 backgroundColor: changed ? ["#4F46E5", "#FDF6E3"] : "#FDF6E3",
               }}
-              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              transition={{
+                default: moveTransition(mode, speed),
+                scale: changed ? writeTransition(mode, speed) : { duration: 0 },
+                backgroundColor: changed ? writeTransition(mode, speed) : { duration: 0.15 },
+              }}
               className="absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-full font-mono text-xs text-ink"
               style={{ width: NODE_R * 2, height: NODE_R * 2 }}
             >
@@ -104,8 +119,55 @@ export default function HeapRenderer({ varName }: HeapRendererProps) {
             </motion.div>
           );
         })}
+        {swap && (
+          <HeapSwapGhosts key={`heap-swap-${currentStep}`} swap={swap} heap={heap} positions={positions} mode={mode} speed={speed} />
+        )}
       </div>
       <ArrayRenderer varName={varName} />
     </div>
+  );
+}
+
+function HeapSwapGhosts({
+  swap,
+  heap,
+  positions,
+  mode,
+  speed,
+}: {
+  swap: { i: number; j: number };
+  heap: SerializedValue[];
+  positions: Map<number, { x: number; y: number }>;
+  mode: ReturnType<typeof useMotionMode>["mode"];
+  speed: number;
+}) {
+  const pi = positions.get(swap.i);
+  const pj = positions.get(swap.j);
+  if (!pi || !pj) return null;
+  const pairs = [
+    { from: pj, to: pi, value: heap[swap.i] },
+    { from: pi, to: pj, value: heap[swap.j] },
+  ];
+  const transition = writeTransition(mode, speed);
+  return (
+    <>
+      {pairs.map((p, idx) => (
+        <motion.div
+          key={idx}
+          initial={{ left: p.from.x, top: p.from.y, scale: 1, opacity: 1 }}
+          animate={{
+            left: p.to.x,
+            top: p.to.y,
+            scale: [1, 1.1, 0.95, 1],
+            opacity: [1, 1, 1, 0],
+          }}
+          transition={transition}
+          className="absolute z-20 flex items-center justify-center border-2 border-accent bg-accent text-paper rounded-full shadow-neo-sm font-mono text-xs pointer-events-none"
+          style={{ width: NODE_R * 2, height: NODE_R * 2 }}
+        >
+          {formatValue(p.value)}
+        </motion.div>
+      ))}
+    </>
   );
 }

@@ -4,17 +4,20 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useTraceStore } from "@/lib/store/traceStore";
 import { formatValue } from "@/lib/trace/format";
 import type { SerializedArray } from "@/lib/trace/types";
+import { moveTransition, squashTransition, useMotionMode } from "@/lib/motion/timing";
 
 interface StackRendererProps {
   varName: string;
 }
 
-/** master.md §9.4 — push falls in from above with squash-and-settle, pop
- * lifts and fades. Index-based keys are correct here since a real stack
- * only ever mutates at the top (last index). */
+/** master.md §9.4 + Phase 6: "Push/pop have weight." Push drops from -24px
+ * and squashes-and-settles on landing; pop lifts +12px, fades, and rotates
+ * +-4deg on the way out. Index-based keys are correct here since a real
+ * stack only ever mutates at the top (last index). */
 export default function StackRenderer({ varName }: StackRendererProps) {
   const steps = useTraceStore((s) => s.steps);
   const currentStep = useTraceStore((s) => s.currentStep);
+  const { mode, speed } = useMotionMode();
   const step = steps[currentStep];
   if (!step) return null;
 
@@ -31,10 +34,13 @@ export default function StackRenderer({ varName }: StackRendererProps) {
             <motion.div
               key={i}
               layout
-              initial={{ y: -16, opacity: 0, scale: 0.9 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8, y: -8 }}
-              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              initial={{ y: -24, opacity: 0, scaleY: 0.8 }}
+              animate={{ y: 0, opacity: 1, scaleY: [0.8, 1.15, 0.95, 1] }}
+              exit={{ y: 12, opacity: 0, rotate: i % 2 === 0 ? 4 : -4 }}
+              transition={{
+                default: squashTransition(mode, speed),
+                layout: moveTransition(mode, speed),
+              }}
               className="font-mono text-sm px-3 py-1 border-2 border-ink shadow-neo-sm rounded-md bg-paper min-w-[3rem] text-center"
             >
               {formatValue(item)}

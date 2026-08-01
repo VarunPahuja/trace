@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useTraceStore } from "@/lib/store/traceStore";
 import { ARRAY_CELL_GAP_PX, ARRAY_CELL_SIZE_PX } from "@/lib/renderers/layoutConstants";
+import { moveTransition, useMotionMode } from "@/lib/motion/timing";
 
 interface WindowOverlayProps {
   startVar?: string;
@@ -14,6 +15,7 @@ interface WindowOverlayProps {
 export default function WindowOverlay({ startVar, endVar }: WindowOverlayProps) {
   const steps = useTraceStore((s) => s.steps);
   const currentStep = useTraceStore((s) => s.currentStep);
+  const { mode, speed } = useMotionMode();
   const step = steps[currentStep];
   if (!step || !startVar || !endVar) return null;
 
@@ -34,7 +36,7 @@ export default function WindowOverlay({ startVar, endVar }: WindowOverlayProps) 
       className="absolute rounded-lg bg-accent/20 border-2 border-accent pointer-events-none z-0"
       style={{ top: -pad, height: ARRAY_CELL_SIZE_PX + pad * 2 }}
       animate={{ left, width }}
-      transition={{ type: "spring", stiffness: 300, damping: 24 }}
+      transition={moveTransition(mode, speed)}
     />
   );
 }

@@ -8,6 +8,11 @@ import { getPyodideClient } from "@/lib/trace/pyodideClient";
 
 export type RunStatus = "idle" | "preprocessing" | "warming" | "running" | "ready" | "error";
 
+/** Phase 6 hard rule: play = full timings, step = 150ms compressed, scrub =
+ * instant jump-render. Set by whichever action last moved `currentStep`;
+ * consumed by src/lib/motion/timing.ts. */
+export type PlaybackMode = "play" | "step" | "scrub";
+
 interface TraceState {
   code: string;
   // Human-readable input description shown in the Input field. Hand-authored
@@ -30,6 +35,7 @@ interface TraceState {
   currentStep: number;
   playing: boolean;
   speed: number;
+  playbackMode: PlaybackMode;
 
   setCode: (code: string) => void;
   setInput: (input: string) => void;
@@ -58,6 +64,7 @@ export const useTraceStore = create<TraceState>((set, get) => ({
   currentStep: 0,
   playing: false,
   speed: 1,
+  playbackMode: "scrub",
 
   setCode: (code) => set({ code, activeExample: null }),
   setInput: (input) => set({ input }),
@@ -72,6 +79,7 @@ export const useTraceStore = create<TraceState>((set, get) => ({
       diffs: [],
       currentStep: 0,
       playing: false,
+      playbackMode: "scrub",
       status: "idle",
       errorMessage: null,
       errorLine: null,
@@ -96,7 +104,14 @@ export const useTraceStore = create<TraceState>((set, get) => ({
     // it, the Problem card keeps showing the previous run's problem while
     // the LLM pass is still in flight. Built-in examples already have the
     // right meta set by loadExample, so leave it alone in that case.
-    set({ steps: [], diffs: [], currentStep: 0, truncated: false, meta: activeExample ? get().meta : null });
+    set({
+      steps: [],
+      diffs: [],
+      currentStep: 0,
+      playbackMode: "scrub",
+      truncated: false,
+      meta: activeExample ? get().meta : null,
+    });
 
     // Built-in examples ship hand-authored meta and never need the LLM
     // pass (§5); anything else (pasted/edited code) goes through
@@ -181,19 +196,28 @@ export const useTraceStore = create<TraceState>((set, get) => ({
   play: () => {
     const { steps, currentStep } = get();
     if (steps.length === 0) return;
-    set({ playing: true, currentStep: currentStep >= steps.length - 1 ? 0 : currentStep });
+    set({
+      playing: true,
+      currentStep: currentStep >= steps.length - 1 ? 0 : currentStep,
+      playbackMode: "play",
+    });
   },
   pause: () => set({ playing: false }),
   stepForward: () =>
     set((s) => {
       const next = Math.min(s.currentStep + 1, Math.max(s.steps.length - 1, 0));
-      return { currentStep: next, playing: next >= s.steps.length - 1 ? false : s.playing };
+      return {
+        currentStep: next,
+        playing: next >= s.steps.length - 1 ? false : s.playing,
+        playbackMode: "step",
+      };
     }),
-  stepBack: () => set((s) => ({ currentStep: Math.max(s.currentStep - 1, 0), playing: false })),
+  stepBack: () => set((s) => ({ currentStep: Math.max(s.currentStep - 1, 0), playing: false, playbackMode: "step" })),
   seek: (index) =>
     set((s) => ({
       currentStep: Math.min(Math.max(index, 0), Math.max(s.steps.length - 1, 0)),
       playing: false,
+      playbackMode: "scrub",
     })),
   setSpeed: (speed) => set({ speed }),
 }));

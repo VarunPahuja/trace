@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useTraceStore } from "@/lib/store/traceStore";
 import { lastKnownArray } from "@/lib/renderers/lastKnownValue";
 import type { SerializedValue } from "@/lib/trace/types";
+import { moveTransition, useMotionMode } from "@/lib/motion/timing";
 
 interface IntervalRendererProps {
   varName: string;
@@ -20,6 +21,7 @@ const ROW_GAP = 10;
 export default function IntervalRenderer({ varName }: IntervalRendererProps) {
   const steps = useTraceStore((s) => s.steps);
   const currentStep = useTraceStore((s) => s.currentStep);
+  const { mode, speed } = useMotionMode();
   const step = steps[currentStep];
   if (!step) return null;
 
@@ -60,7 +62,7 @@ export default function IntervalRenderer({ varName }: IntervalRendererProps) {
                   scale: 1,
                 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                transition={moveTransition(mode, speed)}
                 className="absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-full bg-accent/20 font-mono text-xs whitespace-nowrap px-1"
                 style={{ height: BAR_HEIGHT }}
               >

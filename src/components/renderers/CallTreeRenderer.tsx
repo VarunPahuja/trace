@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useTraceStore } from "@/lib/store/traceStore";
 import { computeCallTree, computeCallTreeLayout, flattenCallTree, type CallTreeNode } from "@/lib/renderers/callTree";
+import { edgeLeadSeconds, edgeTransition, moveTransition, squashTransition, useMotionMode } from "@/lib/motion/timing";
 
 const NODE_W = 64;
 const NODE_H = 28;
@@ -15,10 +16,16 @@ const TOP_PAD = 16;
  * events. Active-path nodes (still on the call stack) fill accent; a node
  * fills green for the one step it returns on; everything else that has
  * already returned fades to 30% — de-emphasizing explored branches while
- * keeping the current path legible. */
+ * keeping the current path legible. Phase 6: a call "pushes" a new node —
+ * it drops in from above with squash-and-settle, and the edge into it
+ * draws first. A return "pops" — a one-shot lift+fade+rotate flourish on
+ * the exact step it returns, then it settles into the permanent faded
+ * state. `node.id` is literally the call event's step index, so "is this
+ * brand new" is just `node.id === currentStep` — no extra bookkeeping. */
 export default function CallTreeRenderer() {
   const steps = useTraceStore((s) => s.steps);
   const currentStep = useTraceStore((s) => s.currentStep);
+  const { mode, speed } = useMotionMode();
 
   const roots = useMemo(() => computeCallTree(steps, currentStep), [steps, currentStep]);
   const positions = useMemo(() => computeCallTreeLayout(roots), [roots]);
@@ -46,6 +53,7 @@ export default function CallTreeRenderer() {
   const height = (maxY + 1) * SPACING_Y + TOP_PAD + 20;
   const xPos = (x: number) => x * SPACING_X + SPACING_X / 2;
   const yPos = (y: number) => y * SPACING_Y + TOP_PAD;
+  const edgeLead = edgeLeadSeconds(mode, speed);
 
   return (
     <div className="overflow-x-auto pb-4">
@@ -58,12 +66,13 @@ export default function CallTreeRenderer() {
             const c = positions.get(node.id);
             if (!p || !c) return null;
             const coords = { x1: xPos(p.x), y1: yPos(p.y), x2: xPos(c.x), y2: yPos(c.y) };
+            const isNew = node.id === currentStep;
             return (
               <motion.line
                 key={node.id}
-                initial={coords}
-                animate={coords}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                initial={isNew ? { ...coords, pathLength: 0 } : { ...coords, pathLength: 1 }}
+                animate={{ ...coords, pathLength: 1 }}
+                transition={isNew ? edgeTransition(mode, speed) : moveTransition(mode, speed)}
                 stroke="#111111"
                 strokeWidth={2}
               />
@@ -76,13 +85,28 @@ export default function CallTreeRenderer() {
           const justReturned = node.returnedAtStep === currentStep;
           const isActive = activeNodeIds.has(node.id);
           const isFaded = !isActive && !justReturned;
+          const isNew = node.id === currentStep;
           const cx = { left: xPos(pos.x) - NODE_W / 2, top: yPos(pos.y) - NODE_H / 2 };
+          const targetOpacity = isFaded ? 0.3 : 1;
+
           return (
             <motion.div
               key={node.id}
-              initial={{ ...cx, scale: 0.5, opacity: 0 }}
-              animate={{ ...cx, scale: 1, opacity: isFaded ? 0.3 : 1 }}
-              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              initial={isNew ? { ...cx, y: -24, scaleY: 0.8, opacity: 0 } : false}
+              animate={
+                justReturned
+                  ? { ...cx, y: [0, -12, 0], rotate: [0, node.id % 2 === 0 ? 4 : -4, 0], opacity: [1, 1, 0.3] }
+                  : { ...cx, y: 0, scaleY: [0.8, 1.15, 0.95, 1], opacity: targetOpacity, rotate: 0 }
+              }
+              transition={{
+                // justReturned/isNew animate 3+ keyframe arrays (squash,
+                // lift-fade-rotate) which springs can't do — only two
+                // keyframes are supported there — so those cases use the
+                // tween-based squashTransition instead.
+                default: isNew || justReturned ? squashTransition(mode, speed) : moveTransition(mode, speed),
+                left: { ...moveTransition(mode, speed), delay: isNew ? edgeLead : 0 },
+                top: { ...moveTransition(mode, speed), delay: isNew ? edgeLead : 0 },
+              }}
               className={`absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-md font-mono text-[10px] whitespace-nowrap px-1 ${
                 justReturned ? "bg-go text-paper" : isActive ? "bg-accent text-paper" : "bg-paper text-ink"
               }`}

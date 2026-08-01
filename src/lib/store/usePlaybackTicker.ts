@@ -19,7 +19,7 @@ export function usePlaybackTicker() {
         useTraceStore.setState({ playing: false });
         return;
       }
-      useTraceStore.setState({ currentStep: state.currentStep + 1 });
+      useTraceStore.setState({ currentStep: state.currentStep + 1, playbackMode: "play" });
     }, BASE_STEP_INTERVAL_MS / speed);
     return () => clearInterval(interval);
   }, [playing, speed]);

@@ -37,7 +37,7 @@ export default function WorkspacePage() {
       {/* Right panel ~58%: controls + visualization stage + variables */}
       <section className="lg:w-[58%] flex flex-col gap-4">
         <ControlDeck />
-        <div className="card-neo flex flex-col max-h-[75vh] overflow-y-auto">
+        <div data-testid="viz-stage" className="card-neo flex flex-col max-h-[75vh] overflow-y-auto">
           <VisualizationStage />
         </div>
         <VariablesStrip />

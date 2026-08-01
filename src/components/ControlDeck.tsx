@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useTraceStore } from "@/lib/store/traceStore";
 import { usePlaybackTicker } from "@/lib/store/usePlaybackTicker";
 import { SPEEDS } from "@/lib/store/playbackSpeeds";
@@ -21,6 +22,7 @@ export default function ControlDeck() {
 
   const hasTrace = steps.length > 0;
   const maxIndex = Math.max(steps.length - 1, 0);
+  const progressPct = maxIndex === 0 ? 0 : (currentStep / maxIndex) * 100;
 
   const tickPositions = useMemo(
     () =>
@@ -76,8 +78,21 @@ export default function ControlDeck() {
           ))}
         </div>
 
-        <span className="font-mono text-xs text-ink/60 ml-auto">
-          {hasTrace ? `${currentStep + 1} / ${steps.length}` : "0 / 0"}
+        {/* Phase 6 chrome micro-delight: step counter digits flip on
+            change instead of just re-rendering text in place. */}
+        <span className="font-mono text-xs text-ink/60 ml-auto overflow-hidden relative inline-flex items-center h-4">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={hasTrace ? currentStep : "empty"}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="inline-block"
+            >
+              {hasTrace ? `${currentStep + 1} / ${steps.length}` : "0 / 0"}
+            </motion.span>
+          </AnimatePresence>
         </span>
       </div>
 
@@ -89,7 +104,7 @@ export default function ControlDeck() {
           value={currentStep}
           disabled={!hasTrace}
           onChange={(e) => seek(Number(e.target.value))}
-          className="w-full accent-accent disabled:opacity-40"
+          className="w-full accent-accent disabled:opacity-40 relative z-10"
           aria-label="Scrub timeline"
         />
         <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-1">
@@ -102,6 +117,15 @@ export default function ControlDeck() {
               style={{ left: `${maxIndex === 0 ? 0 : (i / maxIndex) * 100}%` }}
             />
           ))}
+          {/* Phase 6: timeline playhead glows while playing. */}
+          {playing && (
+            <motion.div
+              className="absolute top-1/2 w-3 h-3 rounded-full bg-accent -translate-y-1/2 -translate-x-1/2 pointer-events-none"
+              style={{ left: `${progressPct}%`, filter: "blur(4px)" }}
+              animate={{ opacity: [0.35, 0.9, 0.35] }}
+              transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+            />
+          )}
         </div>
       </div>
     </div>

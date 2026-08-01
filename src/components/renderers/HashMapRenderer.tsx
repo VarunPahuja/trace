@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useTraceStore } from "@/lib/store/traceStore";
 import { formatValue } from "@/lib/trace/format";
 import type { SerializedDict } from "@/lib/trace/types";
+import { moveTransition, staggerDelay, useMotionMode, writeTransition } from "@/lib/motion/timing";
 
 interface HashMapRendererProps {
   varName: string;
@@ -16,10 +17,14 @@ function asDict(value: unknown): SerializedDict | null {
   return null;
 }
 
-/** master.md §9.3 — new entries drop in, value updates flip-pulse. */
+/** master.md §9.3 + Phase 6: new entries drop in, value updates flip-pulse.
+ * Multiple entries changing in the same step (rare, but possible for
+ * frequency-map-style code that touches several keys per line) stagger
+ * 40ms apart like ArrayRenderer's writes. */
 export default function HashMapRenderer({ varName }: HashMapRendererProps) {
   const steps = useTraceStore((s) => s.steps);
   const currentStep = useTraceStore((s) => s.currentStep);
+  const { mode, speed } = useMotionMode();
 
   const step = steps[currentStep];
   const prevStep = currentStep > 0 ? steps[currentStep - 1] : null;
@@ -31,6 +36,13 @@ export default function HashMapRenderer({ varName }: HashMapRendererProps) {
   const prevDict = prevStep ? asDict(prevStep.locals[varName]) : null;
   const prevEntries = new Map((prevDict?.entries ?? []).map(([k, v]) => [formatValue(k), formatValue(v)]));
 
+  const changedKeys = dict.entries
+    .map(([k]) => formatValue(k))
+    .filter((keyStr, idx) => {
+      const valStr = formatValue(dict.entries[idx][1]);
+      return prevEntries.has(keyStr) && prevEntries.get(keyStr) !== valStr;
+    });
+
   return (
     <div className="flex flex-col gap-1">
       <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
@@ -39,7 +51,9 @@ export default function HashMapRenderer({ varName }: HashMapRendererProps) {
           {dict.entries.map(([k, v]) => {
             const keyStr = formatValue(k);
             const valStr = formatValue(v);
-            const isChanged = prevEntries.has(keyStr) && prevEntries.get(keyStr) !== valStr;
+            const changeIndex = changedKeys.indexOf(keyStr);
+            const isChanged = changeIndex !== -1;
+            const delay = isChanged ? staggerDelay(changeIndex, mode, speed) : 0;
             return (
               <motion.div
                 key={keyStr}
@@ -47,7 +61,10 @@ export default function HashMapRenderer({ varName }: HashMapRendererProps) {
                 initial={{ y: -8, opacity: 0 }}
                 animate={{ y: 0, opacity: 1, scale: isChanged ? [1, 1.15, 1] : 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                transition={{
+                  default: moveTransition(mode, speed),
+                  scale: isChanged ? { ...writeTransition(mode, speed), delay } : { duration: 0 },
+                }}
                 className="font-mono text-xs px-2 py-1 rounded-full border-2 border-ink shadow-neo-sm bg-paper"
               >
                 {keyStr}: {valStr}
