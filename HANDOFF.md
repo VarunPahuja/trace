@@ -32,6 +32,10 @@ Per-renderer visual correctness (does each of the 36 examples' specific algorith
 
 **Error states — done.** Live-tested Python runtime errors, oversized code (real 413), empty code, and malformed share links against the running app — all already rendered designed cards with friendly messages, no raw status codes or stack traces leak anywhere (`formatValue` already maps `undefined`→"?" and `null`→"None"). Found and fixed one inconsistency: the "Broken share link" card used a plain black border instead of the alarm-tinted treatment every other error state uses.
 
+**Copy pass — done.** Swept for lorem/TODO/leaked developer-speak — found none (`formatValue` already handles `undefined`/`null` correctly). Fixed two flat "loading…" strings that broke the app's established playful voice.
+
+**Meta/SEO/OG — done.** Root layout has metadataBase + title template + full OpenGraph/Twitter fields; every route (/, /app, /tracker, /signin, /v) has its own title/description via thin layout.tsx wrappers where the page is a client component. Generated a real brand-style OG image and apple-touch-icon with `next/og`'s `ImageResponse` (matches the existing wordmark badge treatment exactly) — both prerender as static files, not per-request functions. `/v` (share links) gets its own explicit OG title so pasted links preview as themselves, not the generic landing page.
+
 **Performance — done, found a real bug.** `AuthNav`/`AuthInit` mount globally (every route needs the sign-in link), and the Supabase client factory statically imported `@supabase/ssr` — so `@supabase/auth-js` (measured 498KB) was loading on *every* route including the landing page, regardless of configuration, directly regressing Phase 7's "no heavy bundle on landing" guarantee. Fixed with a dynamic `import()` that only fetches the SDK once `isSupabaseConfigured()` is actually true; landing page's Supabase JS dropped from 498KB to 0.6KB. Also confirmed scrub performance stays under 75ms even on a synthetic 800-step trace (the 36 built-in examples top out around 200 steps by design, so none reach "500+" through normal use).
 
 ---
