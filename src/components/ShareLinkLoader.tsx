@@ -45,7 +45,7 @@ export default function ShareLinkLoader({ encoded }: ShareLinkLoaderProps) {
   if (!payload) {
     return (
       <div className="flex-1 flex items-center justify-center p-6">
-        <div className="card-neo p-6 max-w-md text-center flex flex-col gap-3 items-center">
+        <div className="border-4 border-alarm shadow-neo rounded-[14px] bg-alarm/10 p-6 max-w-md text-center flex flex-col gap-3 items-center">
           <div className="font-display uppercase text-alarm">Broken share link</div>
           <p className="font-body text-sm text-ink/70">
             This link couldn&apos;t be read — it may be malformed, too old, or too large.
