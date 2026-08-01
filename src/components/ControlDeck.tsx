@@ -34,7 +34,7 @@ export default function ControlDeck() {
 
   return (
     <div className="card-neo p-3 flex flex-col gap-3">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap gap-y-2">
         <button
           type="button"
           disabled={!hasTrace}

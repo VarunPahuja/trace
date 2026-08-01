@@ -29,7 +29,7 @@ export default function StackRenderer({ varName }: StackRendererProps) {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/60">{varName}</div>
       <div className="flex flex-col-reverse gap-1 items-start min-h-[2.5rem]">
         <AnimatePresence initial={false}>
           {stack.map((item, i) => (

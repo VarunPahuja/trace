@@ -12,7 +12,7 @@ export default function ProblemCard() {
   return (
     <div className="card-neo p-3 flex flex-col gap-2">
       <div className="font-display text-xs uppercase tracking-tight text-accent">Problem</div>
-      <div className={`font-display text-sm uppercase tracking-tight ${unknown ? "text-ink/50" : "text-ink"}`}>
+      <div className={`font-display text-sm uppercase tracking-tight ${unknown ? "text-ink/60" : "text-ink"}`}>
         {unknown ? "Unrecognized problem" : problemName}
       </div>
       {problemSummary && <p className="font-body text-sm text-ink/80">{problemSummary}</p>}

@@ -101,7 +101,7 @@ function SignInContent() {
         Continue with Google
       </button>
 
-      <div className="flex items-center gap-3 text-ink/40 font-mono text-xs uppercase">
+      <div className="flex items-center gap-3 text-ink/60 font-mono text-xs uppercase">
         <div className="flex-1 h-px bg-ink/20" />
         or
         <div className="flex-1 h-px bg-ink/20" />
@@ -121,7 +121,7 @@ function SignInContent() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             aria-label="Email address"
-            className="card-neo px-3 py-2 font-mono text-sm text-ink placeholder:text-ink/40 outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-40"
+            className="card-neo px-3 py-2 font-mono text-sm text-ink placeholder:text-ink/40 disabled:opacity-40"
           />
           <button
             type="submit"
@@ -133,7 +133,7 @@ function SignInContent() {
         </form>
       )}
 
-      <Link href="/app" className="text-center font-mono text-xs text-ink/50 hover:text-accent transition-colors">
+      <Link href="/app" className="text-center font-mono text-xs text-ink/60 hover:text-accent transition-colors">
         skip for now →
       </Link>
     </div>
@@ -143,7 +143,7 @@ function SignInContent() {
 export default function SignInPage() {
   return (
     <div className="flex-1 flex items-center justify-center p-6">
-      <Suspense fallback={<div className="card-neo p-6 max-w-md w-full text-center text-ink/50 text-sm">loading…</div>}>
+      <Suspense fallback={<div className="card-neo p-6 max-w-md w-full text-center text-ink/60 text-sm">loading…</div>}>
         <SignInContent />
       </Suspense>
     </div>

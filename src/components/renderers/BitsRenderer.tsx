@@ -50,7 +50,7 @@ export default function BitsRenderer({ varNames }: BitsRendererProps) {
         const rowShift = isShiftRight ? CELL_W / 2 : isShiftLeft ? -CELL_W / 2 : 0;
         return (
           <div key={name} className="flex flex-col gap-1">
-            <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">
+            <div className="font-display text-[10px] uppercase tracking-tight text-ink/60">
               {name} = {value}
             </div>
             <motion.div

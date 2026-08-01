@@ -35,7 +35,7 @@ export default function TrackerSummary() {
       {stats.map((s) => (
         <div key={s.label} className={`card-neo px-4 py-2 flex flex-col items-center ${s.color}`}>
           <div className="font-display text-xl">{s.value}</div>
-          <div className="font-mono text-[10px] uppercase text-ink/50">{s.label}</div>
+          <div className="font-mono text-[10px] uppercase text-ink/60">{s.label}</div>
         </div>
       ))}
     </div>

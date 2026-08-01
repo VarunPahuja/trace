@@ -46,7 +46,7 @@ export default function TrackerCard({ entry, onEdit }: TrackerCardProps) {
           ) : (
             <span className="font-display text-sm uppercase">{entry.name}</span>
           )}
-          <div className="font-mono text-[10px] text-ink/50">{entry.topic}</div>
+          <div className="font-mono text-[10px] text-ink/60">{entry.topic}</div>
         </div>
         <div className="flex items-center gap-1 shrink-0">
           <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded-full border border-ink ${DIFFICULTY_COLOR[entry.difficulty]}`}>
@@ -64,10 +64,10 @@ export default function TrackerCard({ entry, onEdit }: TrackerCardProps) {
       </div>
 
       {entry.intuition && <p className="font-body text-xs text-ink/70">{entry.intuition}</p>}
-      {entry.notes && <p className="font-mono text-[11px] text-ink/50 whitespace-pre-wrap">{entry.notes}</p>}
+      {entry.notes && <p className="font-mono text-[11px] text-ink/60 whitespace-pre-wrap">{entry.notes}</p>}
 
       <div className="flex items-center justify-between mt-1">
-        <span className="font-mono text-[10px] text-ink/40">{entry.timeMinutes}m</span>
+        <span className="font-mono text-[10px] text-ink/60">{entry.timeMinutes}m</span>
         <div className="flex gap-2">
           <button type="button" onClick={onEdit} className="font-mono text-[10px] underline text-ink/60">
             edit

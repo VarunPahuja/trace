@@ -47,7 +47,7 @@ export default function TrackerFilters() {
             setFilterTopic(null);
             setFilterStatus(null);
           }}
-          className="text-ink/50 underline"
+          className="text-ink/60 underline"
         >
           clear filters
         </button>

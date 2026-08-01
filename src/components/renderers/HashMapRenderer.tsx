@@ -45,7 +45,7 @@ export default function HashMapRenderer({ varName }: HashMapRendererProps) {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/60">{varName}</div>
       <div className="flex flex-wrap gap-1">
         <AnimatePresence>
           {dict.entries.map(([k, v]) => {
