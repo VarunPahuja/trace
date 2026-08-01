@@ -12,8 +12,10 @@ interface StackRendererProps {
 
 /** master.md §9.4 + Phase 6: "Push/pop have weight." Push drops from -24px
  * and squashes-and-settles on landing; pop lifts +12px, fades, and rotates
- * +-4deg on the way out. Index-based keys are correct here since a real
- * stack only ever mutates at the top (last index). */
+ * +-4deg on the way out — and per master.md §12's palette (alarm =
+ * "errors, pops/removals"), flashes alarm-tinted on the way out so a
+ * removal reads distinctly from a write. Index-based keys are correct
+ * here since a real stack only ever mutates at the top (last index). */
 export default function StackRenderer({ varName }: StackRendererProps) {
   const steps = useTraceStore((s) => s.steps);
   const currentStep = useTraceStore((s) => s.currentStep);
@@ -34,9 +36,9 @@ export default function StackRenderer({ varName }: StackRendererProps) {
             <motion.div
               key={i}
               layout
-              initial={{ y: -24, opacity: 0, scaleY: 0.8 }}
-              animate={{ y: 0, opacity: 1, scaleY: [0.8, 1.15, 0.95, 1] }}
-              exit={{ y: 12, opacity: 0, rotate: i % 2 === 0 ? 4 : -4 }}
+              initial={{ y: -24, opacity: 0, scaleY: 0.8, backgroundColor: "#FDF6E3" }}
+              animate={{ y: 0, opacity: 1, scaleY: [0.8, 1.15, 0.95, 1], backgroundColor: "#FDF6E3" }}
+              exit={{ y: 12, opacity: 0, rotate: i % 2 === 0 ? 4 : -4, backgroundColor: "#EF4444" }}
               transition={{
                 default: squashTransition(mode, speed),
                 layout: moveTransition(mode, speed),

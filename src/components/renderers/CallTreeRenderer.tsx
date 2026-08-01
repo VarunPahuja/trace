@@ -96,13 +96,18 @@ export default function CallTreeRenderer() {
               animate={
                 justReturned
                   ? { ...cx, y: [0, -12, 0], rotate: [0, node.id % 2 === 0 ? 4 : -4, 0], opacity: [1, 1, 0.3] }
-                  : { ...cx, y: 0, scaleY: [0.8, 1.15, 0.95, 1], opacity: targetOpacity, rotate: 0 }
+                  : isNew
+                    ? { ...cx, y: 0, scaleY: [0.8, 1.15, 0.95, 1], opacity: targetOpacity, rotate: 0 }
+                    : { ...cx, y: 0, scaleY: 1, opacity: targetOpacity, rotate: 0 }
               }
               transition={{
                 // justReturned/isNew animate 3+ keyframe arrays (squash,
                 // lift-fade-rotate) which springs can't do — only two
-                // keyframes are supported there — so those cases use the
-                // tween-based squashTransition instead.
+                // keyframes are supported there (see
+                // motion.dev/troubleshooting/spring-two-frames) — so those
+                // cases use the tween-based squashTransition instead. A
+                // settled node (neither) only ever targets plain scalar
+                // values, so the spring is safe for it.
                 default: isNew || justReturned ? squashTransition(mode, speed) : moveTransition(mode, speed),
                 left: { ...moveTransition(mode, speed), delay: isNew ? edgeLead : 0 },
                 top: { ...moveTransition(mode, speed), delay: isNew ? edgeLead : 0 },
