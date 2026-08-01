@@ -22,10 +22,27 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://tracepy.vercel.app";
+const TITLE = "TRACE — watch your code think";
+const DESCRIPTION =
+  "Paste Python, press Visualize, and watch DSA algorithms execute step by step with real, animated traces.";
+
 export const metadata: Metadata = {
-  title: "TRACE — watch your code think",
-  description:
-    "Paste Python, press Visualize, and watch DSA algorithms execute step by step with real, animated traces.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: "%s — TRACE" },
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: "TRACE",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({
