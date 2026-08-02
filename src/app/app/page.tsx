@@ -26,7 +26,7 @@ export default function WorkspacePage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="input (informational — edit code directly to change values)"
-          className="card-neo p-3 font-mono text-sm text-ink placeholder:text-ink/40 outline-none"
+          className="card-neo p-3 font-mono text-sm text-ink placeholder:text-ink/40"
         />
         <VisualizeButton />
         <ExamplesDrawer />

@@ -78,7 +78,7 @@ export default function ArrayRenderer({ varName, overlay, dimRangeStartVar, dimR
 
   return (
     <div className="flex flex-col gap-1 pb-5">
-      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/60">{varName}</div>
       <div className="relative flex gap-1">
         {overlay}
         {array.map((cell, i) => {
@@ -129,7 +129,7 @@ export default function ArrayRenderer({ varName, overlay, dimRangeStartVar, dimR
                   </div>
                 )}
               </motion.div>
-              <div className="text-[10px] font-mono text-ink/40">{i}</div>
+              <div className="text-[10px] font-mono text-ink/60">{i}</div>
             </div>
           );
         })}

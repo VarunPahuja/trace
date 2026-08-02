@@ -49,7 +49,7 @@ export default function LandingPage() {
       </section>
 
       <section className="w-full max-w-5xl mx-auto px-6 pb-16 sm:pb-24 flex flex-col items-center gap-4">
-        <div className="font-display text-xs uppercase tracking-wide text-ink/50">The full roadmap</div>
+        <div className="font-display text-xs uppercase tracking-wide text-ink/60">The full roadmap</div>
         <div className="flex flex-wrap justify-center gap-2">
           {TOPICS.map((topic) => (
             <span

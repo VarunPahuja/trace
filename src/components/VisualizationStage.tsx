@@ -79,7 +79,7 @@ export default function VisualizationStage() {
 
   if (status === "idle" && steps.length === 0) {
     return (
-      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/50">
+      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/60">
         paste code and press Visualize
       </div>
     );
@@ -121,7 +121,7 @@ export default function VisualizationStage() {
 
   if (scene.primary.length === 0 && scene.secondary.length === 0) {
     return (
-      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/50 p-6 text-center">
+      <div className="min-h-[320px] flex items-center justify-center font-body text-ink/60 p-6 text-center">
         no renderer matched this trace yet — check the variables strip below
       </div>
     );

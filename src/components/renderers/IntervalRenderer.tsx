@@ -40,7 +40,7 @@ export default function IntervalRenderer({ varName }: IntervalRendererProps) {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/60">{varName}</div>
       <div
         className="relative"
         style={{ width: xOf(maxVal) + 40, height: intervals.length * (BAR_HEIGHT + ROW_GAP) }}

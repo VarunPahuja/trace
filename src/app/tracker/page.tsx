@@ -9,11 +9,13 @@ import TrackerCard from "@/components/tracker/TrackerCard";
 import TrackerEntryModal from "@/components/tracker/TrackerEntryModal";
 import TrackerExportButton from "@/components/tracker/TrackerExportButton";
 import UndoToast from "@/components/tracker/UndoToast";
+import ImportPromptModal from "@/components/tracker/ImportPromptModal";
 
 export default function TrackerPage() {
   const hydrate = useTrackerStore((s) => s.hydrate);
   const hydrated = useTrackerStore((s) => s.hydrated);
   const entries = useTrackerStore((s) => s.entries);
+  const mode = useTrackerStore((s) => s.mode);
   const filterTopic = useTrackerStore((s) => s.filterTopic);
   const filterStatus = useTrackerStore((s) => s.filterStatus);
 
@@ -30,7 +32,14 @@ export default function TrackerPage() {
   return (
     <div className="flex-1 flex flex-col gap-4 p-6 max-w-5xl w-full mx-auto">
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <h1 className="font-display text-3xl uppercase">Tracker</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="font-display text-3xl uppercase">Tracker</h1>
+          {hydrated && mode === "cloud" && (
+            <span className="font-mono text-[10px] uppercase border-neo shadow-neo-sm rounded-full px-2 py-0.5 bg-go/20 text-ink/70">
+              synced
+            </span>
+          )}
+        </div>
         <div className="flex gap-2">
           <TrackerExportButton />
           <button type="button" onClick={() => setModalEntry("new")} className="btn-neo-accent text-xs py-1.5">
@@ -43,9 +52,9 @@ export default function TrackerPage() {
       <TrackerFilters />
 
       {!hydrated ? (
-        <div className="card-neo p-6 font-body text-ink/50">loading…</div>
+        <div className="card-neo p-6 font-body text-ink/60">pulling up your problems…</div>
       ) : filtered.length === 0 ? (
-        <div className="card-neo p-6 font-body text-ink/50 text-center">
+        <div className="card-neo p-6 font-body text-ink/60 text-center">
           {entries.length === 0 ? "No problems logged yet — add your first one." : "Nothing matches these filters."}
         </div>
       ) : (
@@ -63,6 +72,7 @@ export default function TrackerPage() {
         />
       )}
       <UndoToast />
+      <ImportPromptModal />
     </div>
   );
 }

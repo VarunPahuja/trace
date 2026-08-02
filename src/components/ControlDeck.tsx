@@ -34,7 +34,7 @@ export default function ControlDeck() {
 
   return (
     <div className="card-neo p-3 flex flex-col gap-3">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap gap-y-2">
         <button
           type="button"
           disabled={!hasTrace}
@@ -79,16 +79,20 @@ export default function ControlDeck() {
         </div>
 
         {/* Phase 6 chrome micro-delight: step counter digits flip on
-            change instead of just re-rendering text in place. */}
-        <span className="font-mono text-xs text-ink/60 ml-auto overflow-hidden relative inline-flex items-center h-4">
-          <AnimatePresence mode="popLayout" initial={false}>
+            change instead of just re-rendering text in place. Children are
+            absolutely positioned within a fixed-size box (not inline-flow)
+            so rapid-fire stepping — faster than one 120ms exit — stacks
+            overlapping crossfades instead of bleeding concatenated text
+            sideways; only the latest span ever affects layout. */}
+        <span className="font-mono text-xs text-ink/60 ml-auto relative inline-block h-4 w-16 shrink-0">
+          <AnimatePresence initial={false}>
             <motion.span
               key={hasTrace ? currentStep : "empty"}
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
-              className="inline-block"
+              transition={{ duration: 0.12, ease: "easeOut" }}
+              className="absolute inset-0 flex items-center justify-end"
             >
               {hasTrace ? `${currentStep + 1} / ${steps.length}` : "0 / 0"}
             </motion.span>

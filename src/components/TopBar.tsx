@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Marquee from "./Marquee";
 import ShareButton from "./ShareButton";
 import TopicBadge from "./TopicBadge";
+import AuthNav from "./AuthNav";
 
 export default function TopBar() {
   // The landing page ("/") isn't a workspace session — its own demo drives
@@ -31,6 +32,7 @@ export default function TopBar() {
             Tracker
           </Link>
           {!isLanding && <ShareButton />}
+          <AuthNav />
         </nav>
       </div>
       <Marquee />

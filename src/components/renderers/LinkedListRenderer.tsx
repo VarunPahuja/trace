@@ -129,9 +129,13 @@ export default function LinkedListRenderer({ headVars, pointerVars }: LinkedList
                 left: i * stride,
                 top: isReachable ? ROW_TOP : ROW_TOP + DETACHED_DRIFT_PX,
                 opacity: isReachable ? 1 : 0,
+                // master.md §12: alarm = "errors, pops/removals" — a
+                // detached node flashes alarm-tinted as it drifts away,
+                // distinct from a live node's fill.
+                backgroundColor: isReachable ? "#FDF6E3" : "#EF4444",
               }}
               transition={moveTransition(mode, speed)}
-              className="absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-md bg-paper font-mono text-sm"
+              className="absolute flex items-center justify-center border-2 border-ink shadow-neo-sm rounded-md font-mono text-sm"
               style={{ width: NODE_W, height: NODE_H }}
             >
               {formatValue(lastKnownValueById.get(id) ?? null)}

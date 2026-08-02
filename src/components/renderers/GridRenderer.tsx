@@ -53,7 +53,7 @@ export default function GridRenderer({ varName, rowVar, colVar }: GridRendererPr
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="font-display text-[10px] uppercase tracking-tight text-ink/50">{varName}</div>
+      <div className="font-display text-[10px] uppercase tracking-tight text-ink/60">{varName}</div>
       <div className="inline-flex flex-col gap-1">
         {grid.map((row, r) => (
           <div key={r} className="flex gap-1">

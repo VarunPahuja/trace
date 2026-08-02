@@ -25,13 +25,13 @@ export default function ExamplesDrawer() {
         className="w-full flex items-center justify-between px-3 py-2 font-display text-xs uppercase tracking-tight"
       >
         Examples
-        <span className="font-mono text-ink/40">{open ? "▲" : "▼"}</span>
+        <span className="font-mono text-ink/60">{open ? "▲" : "▼"}</span>
       </button>
       {open && (
         <div className="border-t-2 border-ink max-h-72 overflow-y-auto p-2 flex flex-col gap-3">
           {[...groups.entries()].map(([topic, examples]) => (
             <div key={topic} className="flex flex-col gap-1">
-              <div className="font-mono text-[10px] uppercase tracking-wide text-ink/40 px-1">{topic}</div>
+              <div className="font-mono text-[10px] uppercase tracking-wide text-ink/60 px-1">{topic}</div>
               {examples.map((example) => (
                 <button
                   key={example.id}
